@@ -1,0 +1,13 @@
+[project]
+name = "easy-apply"
+version = "1.0.0"
+description = "Basic resume and job tracking app"
+readme = "README.md"
+dependencies = [
+    "flask",
+    "Flask-SQLAlchemy",
+]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit "{{ resume.uer_id }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="summary">Title</label>
+    <input name="summary" id="summary"
+      value="{{ request.form['summary'] or resume.summary }}" required>
+    <label for="skills">skills</label>
+    <textarea name="skills" id="skills">{{ request.form['skills'] or resume.skills }}</textarea>
+    <label for="link">link</label>
+    <textarea name="link" id="link">{{ request.form['link'] or resume.link }}</textarea>
+    <input type="submit" value="Save">
+  </form>
+  <hr>
+  <form action="{{ url_for('profile.deleted', id=resume.id) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Profile{% endblock %}</h1>
+  {% if user %}
+    <a class="action" href="{{ url_for('profile.create') }}">New</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for resume in resumes %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ resume.summary }}</h1>
+          <div class="about">skills {{ resume.skills }} link {{ resume.link }}</div>
+        </div>
+        {% if user.id == resume.user_id %}
+          <a class="action" href="{{ url_for('profile.update', id=resume.id) }}">Edit</a>
+        {% endif %}
+      </header>
+      <p class="body">{{ resume.work_experience }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

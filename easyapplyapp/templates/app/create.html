@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Resume{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="summary">Summary</label>
+    <input name="summary" id="summary" value="{{ request.form['summary'] }}" required>
+    <label for="skills">skills</label>
+    <textarea name="skills" id="skills">{{ request.form['skills'] }}</textarea>
+    <label for="link">link</label>
+    <textarea name="link" id="link">{{ request.form['link'] }}</textarea>
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}
