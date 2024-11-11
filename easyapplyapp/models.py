@@ -59,19 +59,18 @@ class WorkExperience(Base):
         self.responsibil = responsibil
         self.user_id = user_id
         self.resume_id = resume_id
-     
-
-
 class Application(Base):
     __tablename__ = 'applications'
     id = Column(Integer, primary_key=True)
     role = Column(String(500))
     description = Column(String(500))
+    link = Column(String(500)) 
     user_id = Column(Integer, ForeignKey('users.id'))
     resume_id = Column(Integer, ForeignKey('resumes.id'))
 
-    def __init__(self, role=None, description=None, user_id=None, resume_id=None):
+    def __init__(self, role=None, link=None, description=None, user_id=None, resume_id=None):
         self.role = role
+        self.link = link
         self.description = description
         self.user_id = user_id
         self.resume_id = resume_id

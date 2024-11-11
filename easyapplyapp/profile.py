@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for,
 from werkzeug.exceptions import abort
 from .auth import login_required
 from .db import db_session
-from .models import Resume, User, WorkExperience
+from .models import Resume, User, WorkExperience, Application
 from sqlalchemy import update
 
 bp = Blueprint('profile', __name__)
@@ -113,6 +113,26 @@ def deleted(id):
 def apply():
     cur_user_id = session.get('user_id')
     user = User.query.filter(User.id == cur_user_id).first()
+    applications = Application.query.filter(Application.user_id == cur_user_id)
     if request.method == 'POST':
-        pass
-    return render_template('app/apply.html', user=user)
+        role = request.form['role']
+        link = request.form['link']
+        description = request.form['paste']
+        #currently no selection of resume at job application stage
+        resume = Resume.query.filter(Resume.user_id == cur_user_id).first()
+        error = None
+
+        if not link:
+            error = "link is required"
+        
+        if error is not None:
+            flash(error)
+        else:
+            try:
+                application = Application(role=role, link=link, description=description, user_id=cur_user_id, resume_id=resume.id)
+                db_session.add(application)
+                db_session.commit()
+            except:
+                flash("Unable to add application to the database")
+        return redirect(url_for('profile.apply'))  
+    return render_template('app/apply.html', user=user, applications=applications)
