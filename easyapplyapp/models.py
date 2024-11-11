@@ -36,3 +36,19 @@ class Resume(Base):
         self.user_id=user_id
     def __repr__(self):
         return f'<Resume(user_id = {self.user_id}, summary = {self.summary}, link = {self.link}, work_experience = {self.work_experience}, skills = {self.skills}, education = {self.eduaction}, projects = {self.projects})>'
+
+class Application(Base):
+    __tablename__ = 'applications'
+    id = Column(Integer, primary_key=True)
+    role = Column(String(500))
+    description = Column(String(500))
+    user_id = Column(Integer, ForeignKey('users.id'))
+    resume_id = Column(Integer, ForeignKey('resumes.id'))
+
+    def __init__(self, role=None, description=None, user_id=None, resume_id=None):
+        self.role = role
+        self.description = description
+        self.user_id = user_id
+        self.resume_id = resume_id
+    def __repr__(self):
+        return f"<Application(user_id = {self.user_id}, resume_id = {self.resume_id}, role = {self.role}), description = {self.description}>"

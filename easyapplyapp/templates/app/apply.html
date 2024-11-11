@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Applications{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <input type="url" placeholder="Paste link...">
+        <input type="submit" value="Apply for Job">
+    </form>
+    <form method="post">
+        <input type="text" placeholder="Paste job decription...">
+        <input type="submit" value="Apply for Job">
+    </form>
+    
+{% endblock %}

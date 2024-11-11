@@ -82,3 +82,10 @@ def deleted(id):
     db_session.delete(resume)
     db_session.commit()
     return redirect(url_for('profile.index'))
+
+@bp.route('/apply', methods=('GET', 'POST'))
+@login_required
+def apply():
+    if request.method == 'POST':
+        pass
+    return render_template('app/apply.html')
