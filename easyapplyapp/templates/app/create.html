@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post">
+  <form method="post" id="createForm">
     <label for="summary">Summary</label>
     <input name="summary" id="summary" value="{{ request.form['summary'] }}" required>
     <label for="skills">skills</label>
@@ -13,5 +13,23 @@
     <label for="link">link</label>
     <textarea name="link" id="link">{{ request.form['link'] }}</textarea>
     <input type="submit" value="Save">
+    <h2>Work Experience</h2>
+    <label for="title">Job Title</label>
+    <input name="title" id="title">
+    <label for="company">Company</label>
+    <input name="company" id="company">
+    <label for="location">Location</label>
+    <input name="location" id="location">
+    <label for="start">Start Date</label>
+    <input name="start" id="start">
+    <label for="end">End Date</label>
+    <input name="end" id="end">
+    <label for="job-summary">Summary</label>
+    <textarea name="job-summary" id="job-summary"></textarea>
+    <label for="responsibilities">Responsibilities</label>
+    <textarea name="responsibilities" id="responsibilities"></textarea>
   </form>
+  <button class="add" onClick="addWorkExperience()">Add Work Experience</button>
+  <div id="dynamicForm"></div>
+  <script src="{{ url_for('static', filename='create.js') }}"></script>
 {% endblock %}

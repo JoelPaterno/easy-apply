@@ -14,12 +14,18 @@
         <div>
           <h1>{{ resume.summary }}</h1>
           <div class="about">skills {{ resume.skills }} link {{ resume.link }}</div>
+          {% for work in workexperiences_result %}
+            {% if work.resume_id == resume.id %}
+              <p class="body">{{ work.title }}</p>
+              <p class="body">{{ work.company }}</p>
+              <p class="body">{{ work.location }}</p>
+            {% endif %}
+          {% endfor %}
         </div>
         {% if user.id == resume.user_id %}
           <a class="action" href="{{ url_for('profile.update', id=resume.id) }}">Edit</a>
         {% endif %}
       </header>
-      <p class="body">{{ resume.work_experience }}</p>
     </article>
     {% if not loop.last %}
       <hr>

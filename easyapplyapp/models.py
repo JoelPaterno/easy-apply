@@ -20,7 +20,6 @@ class Resume(Base):
     id = Column(Integer, primary_key=True)
     summary = Column(String(500))
     link = Column(String(100))
-    work_experience = Column(String(500))
     skills = Column(String(500))
     education = Column(String(500))
     projects = Column(String(500))
@@ -36,6 +35,32 @@ class Resume(Base):
         self.user_id=user_id
     def __repr__(self):
         return f'<Resume(user_id = {self.user_id}, summary = {self.summary}, link = {self.link}, work_experience = {self.work_experience}, skills = {self.skills}, education = {self.eduaction}, projects = {self.projects})>'
+
+class WorkExperience(Base):
+    __tablename__ = 'workexperiences'
+    id = Column(Integer, primary_key=True)
+    title = Column(String(500))
+    company = Column(String(500))
+    location = Column(String(500))
+    start_date = Column(String(500))
+    end_date = Column(String(500))
+    summary = Column(String(500))
+    responsibil = Column(String(500))
+    user_id = Column(Integer, ForeignKey('users.id'))
+    resume_id = Column(Integer, ForeignKey('resumes.id'))
+
+    def __init__(self, title=None, company=None, location=None, start_date=None, end_date=None, summary=None, responsibil=None, user_id=None, resume_id=None):
+        self.title = title
+        self.company = company
+        self.location = location
+        self.start_date = start_date
+        self.end_date = end_date
+        self.summary = summary
+        self.responsibil = responsibil
+        self.user_id = user_id
+        self.resume_id = resume_id
+     
+
 
 class Application(Base):
     __tablename__ = 'applications'
