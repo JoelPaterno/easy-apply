@@ -1,6 +1,11 @@
 html { font-family: sans-serif; background: #eee; padding: 1rem; }
 body { max-width: 960px; margin: 0 auto; background: white; }
-h1 { font-family: serif; color: #377ba8; margin: 1rem 0; }
+h1 { font-family: sans-serif; color: #377ba8; margin: 1rem 0; }
+h3 {
+    font-family: sans-serif; 
+    color: #000; 
+    margin: 1rem;
+}
 a { color: #377ba8; }
 hr { border: none; border-top: 1px solid lightgray; }
 nav { background: lightgray; display: flex; align-items: center; padding: 0 0.5rem; }
@@ -8,7 +13,7 @@ nav h1 { flex: auto; margin: 0; }
 nav h1 a { text-decoration: none; padding: 0.25rem 0.5rem; }
 nav ul  { display: flex; list-style: none; margin: 0; padding: 0; }
 nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
-.content { padding: 0 1rem 1rem; }
+.content { padding: 0 1rem 1rem; border-radius: 10px;}
 .content > header { border-bottom: 1px solid lightgray; display: flex; align-items: flex-end; }
 .content > header h1 { flex: auto; margin: 1rem 0 0.25rem 0; }
 .flash { margin: 1em 0; padding: 1em; background: #cae6f6; border: 1px solid #377ba8; }
@@ -23,4 +28,89 @@ nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
 .content input, .content textarea { margin-bottom: 1em; }
 .content textarea { min-height: 12em; resize: vertical; }
 input.danger { color: #cc2f2e; }
-input[type=submit] { align-self: start; min-width: 10em; }
+
+input {
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+}
+
+input[type=submit] { 
+    align-self: start; 
+    min-width: 10em; 
+    background-color: #ccc;
+    color: #444;
+    border-color: #444;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    margin: 10px;
+}
+
+textarea {
+    align-self: start; 
+    width: 90%; 
+    background-color: #eee;
+    color: #ccc;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    margin: 10px;
+}
+
+input[type=submit]:hover {
+    background-color: #eee;
+}
+.collapsible {
+    background-color: #eee;
+    color: #444;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    margin: none;
+    font-size: 15px;
+}
+.active, .collapsible:hover {
+    background-color: #ccc;
+}
+.col-content {
+    padding: 0 18px;
+    margin-left: 18px;
+    max-height: 0;
+    transition: max-height 0.2s ease-out;
+    overflow: hidden;
+    background-color: #f1f1f1;
+}
+
+.collapsible:after {
+    content: '\02795'; /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: white;
+    float: right;
+    margin-left: 5px;
+}
+
+.active:after {
+    content: "\2796"; /* Unicode character for "minus" sign (-) */
+  }
+
+button {
+    background-color: #ccc;
+    color: #444;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    margin: 10px;
+}
+
+button:hover {
+    background-color: #eee;
+}
+
+.paste {
+    height: 100px;
+}

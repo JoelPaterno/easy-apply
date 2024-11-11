@@ -14,7 +14,6 @@ def index():
     resumes = Resume.query.filter(Resume.user_id == cur_user_id).all()
     workexperiences_result = []
     for resume in resumes:
-        print(resume.id)
         workexperiences = WorkExperience.query.filter(WorkExperience.resume_id == resume.id).all()
         for workexperience in workexperiences:
             workexperiences_result.append(workexperience)
@@ -112,6 +111,8 @@ def deleted(id):
 @bp.route('/apply', methods=('GET', 'POST'))
 @login_required
 def apply():
+    cur_user_id = session.get('user_id')
+    user = User.query.filter(User.id == cur_user_id).first()
     if request.method == 'POST':
         pass
-    return render_template('app/apply.html')
+    return render_template('app/apply.html', user=user)

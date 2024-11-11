@@ -3,6 +3,9 @@ function addWorkExperience() {
     let newform = document.createElement('form');
     newform.setAttribute('method', 'post');
 
+    var header2 = document.createElement("h2");
+    header2.innerHTML("Work Experience");
+
     var title = document.createElement("input");
     title.setAttribute("type", "text");
     title.setAttribute("name", "Title");
@@ -17,6 +20,7 @@ function addWorkExperience() {
     submit.setAttribute('type', 'submit');
     submit.setAttribute('value', 'Submit');
 
+    newform.appendChild(header2);
     newform.appendChild(title);
     newform.appendChild(company);
     newform.appendChild(submit);

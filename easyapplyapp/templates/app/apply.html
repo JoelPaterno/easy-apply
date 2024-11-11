@@ -10,8 +10,25 @@
         <input type="submit" value="Apply for Job">
     </form>
     <form method="post">
-        <input type="text" placeholder="Paste job decription...">
+        <textarea placeholder="Paste job decription..."></textarea>
         <input type="submit" value="Apply for Job">
     </form>
     
+    <hr>
+    <h3>Today</h3>
+    <button type="button" class="collapsible">Test Job Application</button>
+    <div class="col-content">
+        <h3>Salesforce Admin - Zone IT solutions</h3>
+        <p>Lorem ipsum...</p>
+        <button type=" button">Download Resume and Cover Letter</button>
+    </div>
+    <button type="button" class="collapsible">Software Dev Job Application</button>
+    <div class="col-content">
+        <h3>Software Dev Intern - PWC </h3>
+        <p>Lorem ipsum... this is a job</p>
+        <button type=" button">Download Resume and Cover Letter</button>
+    </div>
+    <h3>This Week</h3>
+    <h3>This Month</h3>
+    <script src="{{ url_for('static', filename='apply.js') }}"></script>
 {% endblock %}

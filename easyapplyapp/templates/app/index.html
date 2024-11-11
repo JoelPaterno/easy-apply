@@ -2,12 +2,18 @@
 
 {% block header %}
   <h1>{% block title %}Profile{% endblock %}</h1>
-  {% if user %}
-    <a class="action" href="{{ url_for('profile.create') }}">New</a>
-  {% endif %}
 {% endblock %}
 
 {% block content %}
+  <h2>Upload your resume</h2>
+  <form>
+    <input type="file" id="resume" name="filename">
+    <input type="submit">
+  <h2>Your Resumes</h2>
+  {% if user %}
+    <a class="action" href="{{ url_for('profile.create') }}">New Resume</a>
+  {% endif %}
+  </form>
   {% for resume in resumes %}
     <article class="post">
       <header>
