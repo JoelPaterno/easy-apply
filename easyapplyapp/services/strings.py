@@ -74,3 +74,16 @@ Analyze the job description to identify key resume skills that would grab the at
 {resume}
 ```
 """
+
+description_application = """
+From the provided job description please populate the job application object including the "role", "company" and "location". 
+
+## Rules:
+- Provide your response in json format.
+- Do not number the output only provide strings
+
+## Job Description:
+```
+{job_description}
+```
+"""

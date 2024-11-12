@@ -6,12 +6,32 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel
-from .pdf_generator import strings
+from easyapplyapp.services import strings
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 model = ChatOpenAI(model="gpt-4")
+
+def create_job_application(description=str) -> dict:
+    class JobApplication(BaseModel):
+        role: str
+        company: str
+        location: str
+    
+    application_template = strings.description_application
+
+    prompt_template = ChatPromptTemplate.from_messages(
+        [("system", application_template)]
+    )
+
+    parser = JsonOutputParser(pydantic_object=JobApplication)
+
+    chain = prompt_template | model | parser
+
+    response = chain.invoke({"job_description": description})
+    print(response)
+    return response
 
 def generate_cover_letter(job_description, resume) -> str:
     class CoverLetter(BaseModel):
@@ -21,6 +41,7 @@ def generate_cover_letter(job_description, resume) -> str:
         outro:str
     
     cover_letter_template = strings.coverletter_template
+    
     #takes {job_description} for a job description and {resume} for a resume
 
     prompt_template = ChatPromptTemplate.from_messages(

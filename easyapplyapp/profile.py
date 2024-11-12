@@ -2,8 +2,10 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for,
 from werkzeug.exceptions import abort
 from .auth import login_required
 from .db import db_session
-from .models import Resume, User, WorkExperience, Application
+from .models import Resume, User, WorkExperience, Application, Education, Certification, Project
 from sqlalchemy import update
+from easyapplyapp.services import llm_handler
+from easyapplyapp.services.pdf_generator import generate_cover_letter, generate_resume
 
 bp = Blueprint('profile', __name__)
 
@@ -28,6 +30,7 @@ def create():
         summary = request.form['summary']
         link = request.form['link']
         skills = request.form['skills']
+        #Handle Work Experience
         title = request.form['title']
         company = request.form['company']
         location = request.form['location']
@@ -36,6 +39,19 @@ def create():
         job_summary = request.form['job-summary']
         responsibil = request.form['responsibilities']
         error = None
+        #Handle Education
+        degree = request.form['degree']
+        institution = request.form['institution']
+        education_location = request.form['education_location']
+        graduation_date = request.form['graduation_date']
+        #Handle Projects
+        project_title = request.form['project_title']
+        project_description = request.form['project_description']
+        project_url = request.form['project_url']
+        #Handle Certifications
+        cert_title = request.form['cert_title']
+        issuer = request.form['issuer']
+        date_obtained = request.form['date_obtained']
 
         if not summary:
             error = "summary is required"
@@ -44,7 +60,7 @@ def create():
             flash(error)
         else:
             try:
-                resume = Resume(summary=summary, link=link, skills=skills, user_id=session.get('user_id'))
+                resume = Resume(summary=summary, link=link, skills=skills, user_id=cur_user_id)
                 db_session.add(resume)
                 db_session.flush()
                 workexperience = WorkExperience(
@@ -58,10 +74,32 @@ def create():
                     user_id=session.get('user_id'),
                     resume_id=resume.id,
                     )
+                education = Education(
+                    degree=degree,
+                    institution=institution,
+                    location=education_location,
+                    graduation_date=graduation_date, 
+                    resume_id=resume.id,
+                ) 
+                project = Project(
+                    title=project_title,
+                    description=project_description,
+                    url=project_url,
+                    resume_id=resume.id,
+                )
+                cert = Certification(
+                    title=cert_title,
+                    issuer=issuer,
+                    date_obtained=date_obtained,
+                    resume_id=resume.id,
+                )
                 db_session.add(workexperience)
+                db_session.add(education)
+                db_session.add(project)
+                db_session.add(cert)
                 db_session.commit()
             except:
-                flash("unable to ass work experience to the database")
+                flash("unable to add resume data to the database")
             return redirect(url_for('profile.index'))   
     return render_template('app/create.html', user=user)
 
@@ -75,6 +113,75 @@ def get_resume(id, check_author=True):
     if check_author and resume.user_id != session.get('user_id'):
         abort(403)
     return resume
+
+def resume_serializer(id: int) -> dict:
+    """
+    Will make database queries and serialise the data to create a python dict of the resume data for a user. 
+    """
+    resume = get_resume(id)
+    user = User.query.filter(User.id == resume.user_id).first()
+    resume_dict = {
+        'name': user.name,
+        'email': '',
+        'phone': '',
+        'address': '',
+        'website_link': resume.link,
+        'summary': resume.summary,
+        'education': [],
+        'work_experience': [],
+        'skills': [],
+        'projects': [],
+        'certifications': [],
+    }
+
+    resume_skills = resume.skills.split(", ")
+    resume_dict['skills'] = resume_skills
+
+    #initaially only one of each
+    educations = Education.query.filter(Education.resume_id == id)
+    for ed in educations:
+        education_dict = {
+            "degree": ed.degree,
+            "institution": ed.institution,
+            "location": ed.location,
+            "graduationDate": ed.graduation_date
+        }
+        resume_dict['education'].append(education_dict)
+
+    work_experiences = WorkExperience.query.filter(WorkExperience.resume_id == id)
+    for we in work_experiences:
+        work_experience_dict = {
+            "title": we.title,
+            "company": we.company,
+            "location": we.company,
+            "startDate": we.company,
+            "endDate": we.company,
+            "summary": we.company,
+            "responsibilities": [we.responsibil.split(", ")]
+        }
+        resume_dict['work_experience'].append(work_experience_dict)
+
+    projects = Project.query.filter(Project.resume_id == id)
+    for proj in projects:
+        project_dict = {
+            "name": proj.title,
+            "description": proj.description,
+            "url": proj.url
+        }
+        resume_dict['projects'].append(project_dict)
+
+    certifications = Certification.query.filter(Certification.resume_id == id)
+    for cert in certifications:
+        cert_dict = {
+            "name": cert.title,
+            "issuer": cert.issuer,
+            "dateObtained": cert.date_obtained
+        }
+        resume_dict['certifications'].append(cert_dict)
+
+    print(resume_dict)
+    return resume_dict
+
 
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
@@ -113,26 +220,36 @@ def deleted(id):
 @bp.route('/apply', methods=('GET', 'POST'))
 @login_required
 def apply():
-    cur_user_id = session.get('user_id')
+    cur_user_id = session.get("user_id")
     user = User.query.filter(User.id == cur_user_id).first()
     applications = Application.query.filter(Application.user_id == cur_user_id)
     if request.method == 'POST':
-        role = request.form['role']
         link = request.form['link']
         description = request.form['paste']
+
         #currently no selection of resume at job application stage
         resume = Resume.query.filter(Resume.user_id == cur_user_id).first()
+        resume_dict = resume_serializer(resume.id)
+
+        #TODO llm function create_job_application(description) will take the description and provide strucured data to create a job application object to add to db
+        application_data = llm_handler.create_job_application(description)
+        role = application_data['role']
+        location = application_data['location']
+        company = application_data['company']
         error = None
 
-        if not link:
-            error = "link is required"
+        if not description:
+            error = "description is required"
         
         if error is not None:
             flash(error)
         else:
             try:
-                application = Application(role=role, link=link, description=description, user_id=cur_user_id, resume_id=resume.id)
+                application = Application(role=role, link=link, description=description, location=location, company=company, user_id=cur_user_id, resume_id=resume.id)
                 db_session.add(application)
+                db_session.flush()
+                generate_resume(application=application, resume=resume_dict)
+                generate_cover_letter(application=application, resume=resume_dict)
                 db_session.commit()
             except:
                 flash("Unable to add application to the database")
