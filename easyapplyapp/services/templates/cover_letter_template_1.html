@@ -1,0 +1,32 @@
+<body>
+    <div class="container">
+        <header>
+            <h1>{{ name }}</h1>
+            <p>{{ email }} | {{ phone }} | {{ address }}</p>
+            <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
+        </header>
+
+        <main class="letter-content">
+            <p class="date">{{ current_date }}</p>
+
+            <p class="salutation">{{ salutation }}</p>
+
+            <div class="body-content">
+                <p>{{ intro }}</p>
+                <p>{{ lead_in }}</p>
+                <ul>
+                    {% for point in points %}
+                    <li>{{ point }}</li>
+                    <br/>
+                    {% endfor %}
+                </ul>
+                <p>{{ outro }}</p>
+            </div>
+
+            <p class="closing">
+                {{ signature }}<br>
+                {{ name }}
+            </p>
+        </main>
+    </div>
+</body>

@@ -172,3 +172,4 @@ dist/
 build/
 *.egg-info/
 database.db
+wkhtmltopdf.exe

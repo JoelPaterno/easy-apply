@@ -22,6 +22,8 @@ def index():
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
+    cur_user_id = session.get('user_id')
+    user = User.query.filter(User.id == cur_user_id).first()
     if request.method == 'POST':
         summary = request.form['summary']
         link = request.form['link']
@@ -61,7 +63,7 @@ def create():
             except:
                 flash("unable to ass work experience to the database")
             return redirect(url_for('profile.index'))   
-    return render_template('app/create.html')
+    return render_template('app/create.html', user=user)
 
 def get_resume(id, check_author=True):
     resume = Resume.query.filter(Resume.id == id).first()

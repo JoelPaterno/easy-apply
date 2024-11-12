@@ -1,10 +1,8 @@
 const dynmaicFormDiv = document.getElementById('dynamicForm');
 function addWorkExperience() {
+    console.log("addWorkExperince function called")
     let newform = document.createElement('form');
     newform.setAttribute('method', 'post');
-
-    var header2 = document.createElement("h2");
-    header2.innerHTML("Work Experience");
 
     var title = document.createElement("input");
     title.setAttribute("type", "text");
@@ -20,9 +18,13 @@ function addWorkExperience() {
     submit.setAttribute('type', 'submit');
     submit.setAttribute('value', 'Submit');
 
-    newform.appendChild(header2);
+    var header = document.createElement("h2");
+    header.innerHTML= "Work Experience";
+
     newform.appendChild(title);
     newform.appendChild(company);
     newform.appendChild(submit);
+    dynmaicFormDiv.appendChild(header)
     dynmaicFormDiv.appendChild(newform)
+    console.log("addWorkExperince function appended form into dynamic form div")
 }

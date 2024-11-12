@@ -16,7 +16,7 @@
     </form>
     
     <hr>
-    <h3>Today</h3>
+    <h3>Applications</h3>
     {% for application in applications %}
         <button type="button" class="collapsible">{{ application.role }}</button>
         <div class="col-content">
@@ -28,7 +28,5 @@
             <button type=" button">Download Resume and Cover Letter</button>
         </div>
     {% endfor %}
-    <h3>This Week</h3>
-    <h3>This Month</h3>
     <script src="{{ url_for('static', filename='apply.js') }}"></script>
 {% endblock %}
