@@ -21,12 +21,24 @@
         <button type="button" class="collapsible">{{ application.role }}</button>
         <div class="col-content">
             <h3>{{ application.role }} </h3>
-            <p>{{ application.link }}</p>
+            <p>{{ application.company }}</p>
+            <p>{{ application.location }}</p>
             <br>
+            <h3>Description</h3>
             <p>{{ application.description }}</p>
             <br>
+            <h3>Resume Data</h3>
+            <p>{{ application.resume_data }}</p>
+            <br>
+            <h3>Cover Letter Data</h3>
+            <p>{{ application.cover_letter_data }}</p>
+            <br>
             <p>TODO: Link to edit Resume and Cover Letter</p>
-            <button type=" button">Download Resume and Cover Letter</button>
+            {% if user.id == resume.user_id %}
+                <a class="action" href="{{ url_for('profile.start_application', id=application.id) }}">Apply</a>
+            {% endif %}
+            <a class="action" href="{{ application.resume_file_path }}" target="_blank">Open Resume</a>
+            <a class="action" href="{{ application.cover_letter_file_path }}" target="_blank">Open Cover Letter</a>
         </div>
     {% endfor %}
     <script src="{{ url_for('static', filename='apply.js') }}"></script>

@@ -1,0 +1,73 @@
+{
+    "name": "Joel Paterno",
+    "email": "joelpaterno1@gmail.com",
+    "phone": "0438 219 671",
+    "address": "Brighton, VIC",
+    "website": "joelpaterno.tech",
+    "website_link" : "https://joelpaterno.tech",
+    "summary": "Computer Science graduate with a background in Biomedical and Computer Science at Monash University. Experienced in troubleshooting, IT and delivering excellent customer service. Passionate about technology and eager to start a career in IT with experience in support and providing timely and effective solutions.",
+    "education": [
+      {
+        "degree": "Graduate Certificate of Computer Science",
+        "institution": "Monash University",
+        "location": "Clayton, VIC",
+        "graduationDate": "Nov 2022"
+      },
+      {
+        "degree": "Bachelor of Biomedical Science",
+        "institution": "Monash University",
+        "location": "Clayton, VIC",
+        "graduationDate": "Nov 2018"
+      }
+    ],
+    "workExperience": [
+      {
+        "title": "Customer Service Agent/Salesforce Project Lead",
+        "company": "Household Capital",
+        "location": "Melbourne, VIC",
+        "startDate": "March 2022",
+        "endDate": "July 2024",
+        "summary": "Customer Service Agent/Salesforce Project Lead with experience in Salesforce Email-to-Case implementation, process automation, and technical research. Led end-to-end projects, developed training resources, and collaborated with cross-functional teams to enhance customer service efficiency and business operations.",
+        "responsibilities": [
+          "Salesforce Implementation: Designed and deployed Email-to-Case for improved ticketing and inbox management.",
+          "Project Management: Led project from planning to user adoption, ensuring smooth execution.",
+          "Technical Research: Evaluated solutions to meet company needs.",
+          "Collaboration: Aligned technical solutions with business goals across teams."
+        ]
+      }
+    ],
+    "skills": [
+      "Customer Service", 
+      "Salesforce",
+      "Email Inbox Management", 
+      "Phone Call Handling",
+      "in-person Support",
+      "Hardware and Software Troubleshooting", 
+      "Ticketing System", 
+      "Cross Team Collaboration", 
+      "Strong Communication Skills", 
+      "Microsoft 365", 
+      "Windows", 
+      "GSuite",
+      "Office Suite"
+    ],
+    "projects": [
+      {
+        "name": "AI Job Application Assistant (RAG Application)",
+        "description": "Developed a web application in python",
+        "url": "https://github.com/JoelPaterno/AI-Job-Application-Assistant-AU"
+      }
+    ],
+    "certifications": [
+      {
+        "name": "Salesforce Associate",
+        "issuer": "Salesforce",
+        "dateObtained": "August 2024"
+      },
+      {
+        "name": "Salesforce Certfied Administrator",
+        "issuer": "Salesforce",
+        "dateObtained": "August 2024 - Current"
+      }
+    ]
+  }

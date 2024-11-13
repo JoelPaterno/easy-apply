@@ -98,7 +98,7 @@ class Application(Base):
     role = Column(String(500))
     company = Column(String(500))
     location = Column(String(500))
-    description = Column(String(500))
+    description = Column(Text)
     link = Column(String(500)) 
     cover_letter_file_path = Column(String(500)) 
     cover_letter_data = Column(Text) 

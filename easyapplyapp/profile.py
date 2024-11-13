@@ -5,7 +5,9 @@ from .db import db_session
 from .models import Resume, User, WorkExperience, Application, Education, Certification, Project
 from sqlalchemy import update
 from easyapplyapp.services import llm_handler
-from easyapplyapp.services.pdf_generator import generate_cover_letter, generate_resume
+from easyapplyapp.services.pdf_generator import generate_cover_letter, generate_resume, generate_filename
+import json
+import os
 
 bp = Blueprint('profile', __name__)
 
@@ -179,7 +181,7 @@ def resume_serializer(id: int) -> dict:
         }
         resume_dict['certifications'].append(cert_dict)
 
-    print(resume_dict)
+    print(f"SERIALISED RESUME DATA - {resume_dict}")
     return resume_dict
 
 
@@ -223,12 +225,13 @@ def apply():
     cur_user_id = session.get("user_id")
     user = User.query.filter(User.id == cur_user_id).first()
     applications = Application.query.filter(Application.user_id == cur_user_id)
+    #currently no selection of resume at job application stage
+    resume = Resume.query.filter(Resume.user_id == cur_user_id).first()
     if request.method == 'POST':
         link = request.form['link']
         description = request.form['paste']
 
-        #currently no selection of resume at job application stage
-        resume = Resume.query.filter(Resume.user_id == cur_user_id).first()
+        
         resume_dict = resume_serializer(resume.id)
 
         #TODO llm function create_job_application(description) will take the description and provide strucured data to create a job application object to add to db
@@ -247,11 +250,55 @@ def apply():
             try:
                 application = Application(role=role, link=link, description=description, location=location, company=company, user_id=cur_user_id, resume_id=resume.id)
                 db_session.add(application)
-                db_session.flush()
-                generate_resume(application=application, resume=resume_dict)
-                generate_cover_letter(application=application, resume=resume_dict)
                 db_session.commit()
-            except:
-                flash("Unable to add application to the database")
+            except Exception as error:
+                flash("An Error Occured:", error)
         return redirect(url_for('profile.apply'))  
-    return render_template('app/apply.html', user=user, applications=applications)
+    return render_template('app/apply.html', user=user, applications=applications, resume=resume)
+
+@bp.route('/<int:id>/start', methods=('POST', 'GET'))
+@login_required
+def start_application(id):
+    #get application
+    application = Application.query.filter(Application.id == id).first()
+    #load in resume data from the json file
+    cwd = os.getcwd()
+    json_path = os.path.join(cwd, 'easyapplyapp','services', 'resume_data.json')
+
+    if application.resume_data is None:
+        try:
+            with open(json_path) as f:
+                    resume_data = json.load(f)
+        except Exception as e:
+            print(e)
+        finally:
+            "Unknown error start route"
+    else: 
+        resume_data = json.loads(application.resume_data)
+    #call llm handler generate_resume_skills -> list of skills
+    resume_str = json.dumps(resume_data)
+    if application.resume_data is None:
+        resume_skills = llm_handler.generate_resume_skills(job_description=application.description, resume=resume_str)
+        resume_data['skills'] = resume_skills
+        resume_data_str = json.dumps(resume_data)
+        application.resume_data = resume_data_str
+    
+    #call llm handler generate_cover_letter -> dict cover letter. 
+    if application.cover_letter_data is None:
+        cover_letter = llm_handler.generate_cover_letter(job_description=application.description, resume=resume_data_str)
+        application.cover_letter_data = json.dumps(cover_letter)
+    else:
+        cover_letter = json.loads(application.cover_letter_data)
+    
+    #call pdf_generator to create resume html file -> application(res_path and res_data) and resume.html file
+    if application.resume_file_path is None:
+        resume_path = generate_resume(resume_data=resume_data, appfilepath=cwd)
+        application.resume_file_path = resume_path
+    #call pdf_generator to create cover letter html file -> application(cl_path and cl_data) and cover_letter.html file
+    if application.cover_letter_file_path is None:
+        cover_letter_path = generate_cover_letter(cover_letter_dict=cover_letter, appfilepath=cwd)
+        application.cover_letter_file_path = cover_letter_path
+    #commit changed application to the db
+    db_session.commit()
+    #redirect to applications
+    return redirect(url_for('profile.apply'))

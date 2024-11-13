@@ -13,27 +13,29 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 model = ChatOpenAI(model="gpt-4")
 
-def create_job_application(description=str) -> dict:
+def create_job_application(description: str) -> dict:
     class JobApplication(BaseModel):
         role: str
         company: str
         location: str
     
     application_template = strings.description_application
+    try:
+        prompt_template = ChatPromptTemplate.from_messages(
+            [("system", application_template)]
+        )
 
-    prompt_template = ChatPromptTemplate.from_messages(
-        [("system", application_template)]
-    )
+        parser = JsonOutputParser(pydantic_object=JobApplication)
 
-    parser = JsonOutputParser(pydantic_object=JobApplication)
+        chain = prompt_template | model | parser
 
-    chain = prompt_template | model | parser
+        response = chain.invoke({"job_description": description})
+        print("CREATE JOB APPLICATION RESPONSE -- " + str(response))
+        return response
+    except Exception as e:
+        print(e)
 
-    response = chain.invoke({"job_description": description})
-    print(response)
-    return response
-
-def generate_cover_letter(job_description, resume) -> str:
+def generate_cover_letter(job_description: str, resume: str) -> str:
     class CoverLetter(BaseModel):
         intro:str
         lead_in:str
@@ -42,33 +44,39 @@ def generate_cover_letter(job_description, resume) -> str:
     
     cover_letter_template = strings.coverletter_template
     
-    #takes {job_description} for a job description and {resume} for a resume
+    try:
+        #takes {job_description} for a job description and {resume} for a resume
 
-    prompt_template = ChatPromptTemplate.from_messages(
-        [("system", cover_letter_template)]
-    )
+        prompt_template = ChatPromptTemplate.from_messages(
+            [("system", cover_letter_template)]
+        )
 
-    parser = JsonOutputParser(pydantic_object=CoverLetter)
+        parser = JsonOutputParser(pydantic_object=CoverLetter)
 
-    chain = prompt_template | model | parser
+        chain = prompt_template | model | parser
 
-    response = chain.invoke({"job_description": job_description, "resume": resume})
-    print(response)
-    return response
+        response = chain.invoke({"job_description": job_description, "resume": resume})
+        print("CREATE COVER LETTER RESPONSE -- " + str(response))
+        return response
+    except Exception as e:
+        print(e)
 
 def generate_resume_skills(job_description, resume) -> list:
     class ResumeSkill(BaseModel):
         skills: list[str]
 
-    resume_skills_template = strings.resume_skills_template
-    prompt_template = ChatPromptTemplate.from_messages(
-        [("system", resume_skills_template)]
-    )
+    try:
+        resume_skills_template = strings.resume_skills_template
+        prompt_template = ChatPromptTemplate.from_messages(
+            [("system", resume_skills_template)]
+        )
 
-    parser = JsonOutputParser(pydantic_object=ResumeSkill)
+        parser = JsonOutputParser(pydantic_object=ResumeSkill)
 
-    chain = prompt_template | model | parser
+        chain = prompt_template | model | parser
 
-    response = chain.invoke({"job_description": job_description, "resume": resume})
-    print(response)
-    return response
+        response = chain.invoke({"job_description": job_description, "resume": resume})
+        print("CREATE RESUME RESPONSE -- " + str(response))
+        return response
+    except Exception as e:
+        print(e)

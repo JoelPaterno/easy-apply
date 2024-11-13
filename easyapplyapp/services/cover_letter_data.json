@@ -1,0 +1,16 @@
+{
+    "name": "Joel Paterno",
+    "email": "joelpaterno1@gmail.com",
+    "phone": "0438 219 671",
+    "address": "Brighton, VIC",
+    "website": "https://joelpaterno.tech",
+    "salutation": "Dear Hiring Manager,",
+    "intro": "This section is an expression of interest and how I am well suited",
+    "lead_in": "career goals and lead into why I am a good fit for the role.",
+    "points": [
+        "point 1 about my experience", 
+        "point 2 why I am suited to the role"
+    ],
+    "outro": "I am looking forward to bringing my skills to ... thank you for considering my application.",
+    "signature": "Sincerely,"
+}
