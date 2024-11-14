@@ -1,6 +1,6 @@
 services:
   easyapplyapp:
-    build: ./easyapplyapp
+    build: .
     container_name: easyapplyapp
     restart: always
     environment:
@@ -10,7 +10,6 @@ services:
 
   nginx:
    build: ./nginx
-   contianer_name: nginx
    restart: always
    ports:
     - "80:80"

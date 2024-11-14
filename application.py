@@ -1,4 +1,3 @@
-import os
 from easyapplyapp import create_app
 
 application = create_app()
