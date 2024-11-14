@@ -33,7 +33,7 @@ def generate_cover_letter(cover_letter_dict: dict, appfilepath=None) -> str:
                 f.write(output_text)
         os.chdir(appfilepath)
         print("FILE GENERATED TO COVER LETTER-- " + output_path + '\\' + f'{filename}.html')
-        return output_path
+        return os.path.join(output_path, f'{filename}.html')
     except Exception as e:
          print(e)
     finally: 
@@ -60,7 +60,7 @@ def generate_resume(resume_data: dict, appfilepath=None) -> str:
                 f.write(output_text)
         os.chdir(appfilepath)
         print("FILE GENERATED TO RESUME -- " + output_path + '\\' + f'{filename}.html')
-        return output_path
+        return os.path.join(output_path, f'{filename}.html')
     except Exception as e:
          print(e)
     finally: 

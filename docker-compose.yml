@@ -1,0 +1,16 @@
+services:
+  easyapplyapp:
+    build: ./easyapplyapp
+    container_name: easyapplyapp
+    restart: always
+    environment:
+      - OPEN_API_KEY=value
+    expose:
+      - 8000
+
+  nginx:
+   build: ./nginx
+   contianer_name: nginx
+   restart: always
+   ports:
+    - "80:80"
