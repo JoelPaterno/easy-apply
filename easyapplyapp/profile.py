@@ -231,9 +231,6 @@ def apply():
         link = request.form['link']
         description = request.form['paste']
 
-        
-        resume_dict = resume_serializer(resume.id)
-
         #TODO llm function create_job_application(description) will take the description and provide strucured data to create a job application object to add to db
         application_data = llm_handler.create_job_application(description)
         role = application_data['role']
