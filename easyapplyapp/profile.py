@@ -29,6 +29,13 @@ def create():
     cur_user_id = session.get('user_id')
     user = User.query.filter(User.id == cur_user_id).first()
     if request.method == 'POST':
+        #for testing form request for dynamically added sections
+        print(request.headers)
+        fields = [k for k in request.form]
+        values = [request.form[k] for k in request.form]
+        data = dict(zip(fields, values))
+        print(data)
+
         summary = request.form['summary']
         link = request.form['link']
         skills = request.form['skills']

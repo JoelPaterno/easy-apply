@@ -1,30 +1,34 @@
-const dynmaicFormDiv = document.getElementById('dynamicForm');
+const dynmaicFormDiv = document.getElementById('createForm');
+var workExperienceBtn = document.getElementById('addwe');
+var counter = 0;
+
 function addWorkExperience() {
     console.log("addWorkExperince function called")
-    let newform = document.createElement('form');
-    newform.setAttribute('method', 'post');
+    console.log(counter)
 
-    var title = document.createElement("input");
+    let title = document.createElement("input");
     title.setAttribute("type", "text");
-    title.setAttribute("name", "Title");
+    title.setAttribute("name", "DYNAMICtitle"+counter);
+    title.setAttribute("id", "DYNAMICtitle"+counter);
     title.setAttribute("placeholder", "Job Title");
 
-    var company = document.createElement("input");
+    let company = document.createElement("input");
     company.setAttribute("type", "text");
-    company.setAttribute("name", "company");
+    company.setAttribute("name", "DYNAMICcompany"+counter);
+    company.setAttribute("id", "DYNAMICcompany"+counter);
     company.setAttribute("placeholder", "Company");
 
-    let submit = document.createElement('input');
-    submit.setAttribute('type', 'submit');
-    submit.setAttribute('value', 'Submit');
-
-    var header = document.createElement("h2");
+    let header = document.createElement("h2");
     header.innerHTML= "Work Experience";
 
-    newform.appendChild(title);
-    newform.appendChild(company);
-    newform.appendChild(submit);
-    dynmaicFormDiv.appendChild(header)
-    dynmaicFormDiv.appendChild(newform)
+    dynmaicFormDiv.appendChild(header);
+    dynmaicFormDiv.appendChild(title);
+    dynmaicFormDiv.appendChild(company);
     console.log("addWorkExperince function appended form into dynamic form div")
+}
+
+workExperienceBtn.onclick = function () {
+    counter++;
+    console.log(counter)
+    addWorkExperience()
 }
