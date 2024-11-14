@@ -29,6 +29,9 @@ def create():
     cur_user_id = session.get('user_id')
     user = User.query.filter(User.id == cur_user_id).first()
     if request.method == 'POST':
+        #TODO: the incoming post data will be dynamic based on how many additions were made this will be parsed into a python dict. 
+        #which will then be used to populate the database objects and commit the resume to the db.
+         
         #for testing form request for dynamically added sections
         print(request.headers)
         fields = [k for k in request.form]
@@ -126,6 +129,8 @@ def get_resume(id, check_author=True):
 def resume_serializer(id: int) -> dict:
     """
     Will make database queries and serialise the data to create a python dict of the resume data for a user. 
+    params = resume(id)
+    returns = resume(dict)
     """
     resume = get_resume(id)
     user = User.query.filter(User.id == resume.user_id).first()
@@ -188,7 +193,7 @@ def resume_serializer(id: int) -> dict:
         }
         resume_dict['certifications'].append(cert_dict)
 
-    print(f"SERIALISED RESUME DATA - {resume_dict}")
+    print(f"SERIALISED RESUME DATA DICT - {resume_dict}")
     return resume_dict
 
 
@@ -238,7 +243,6 @@ def apply():
         link = request.form['link']
         description = request.form['paste']
 
-        #TODO llm function create_job_application(description) will take the description and provide strucured data to create a job application object to add to db
         application_data = llm_handler.create_job_application(description)
         role = application_data['role']
         location = application_data['location']
@@ -270,6 +274,7 @@ def start_application(id):
     json_path = os.path.join(cwd, 'easyapplyapp','services', 'resume_data.json')
 
     if application.resume_data is None:
+        #TODO: Modify this to call resume_serialiser() with the first resume. a resume data dict will be returned which can then be used the same as the loaded json file.
         try:
             with open(json_path) as f:
                     resume_data = json.load(f)
