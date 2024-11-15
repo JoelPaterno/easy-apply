@@ -5,7 +5,7 @@ from .db import db_session
 from .models import Resume, User, WorkExperience, Application, Education, Certification, Project
 from sqlalchemy import update
 from easyapplyapp.services import llm_handler
-from easyapplyapp.services.pdf_generator import generate_cover_letter, generate_resume, generate_filename
+from easyapplyapp.services.pdf_generator import generate_cover_letter, generate_resume
 import json
 import os
 
@@ -23,6 +23,14 @@ def index():
             workexperiences_result.append(workexperience)
     return render_template('app/index.html', user=user, resumes=resumes, workexperiences_result=workexperiences_result)
 
+def extract_num(key : str) -> int: 
+    count_str = ""
+    for num in range(len(key)):
+        if key[num].isnumeric():
+            count_str += str(key[num])
+    count = int(count_str)
+    return count
+
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
@@ -39,31 +47,47 @@ def create():
         data = dict(zip(fields, values))
         print(data)
 
+        #loop through data to populate counts - need to update names of fields to correspond to objects
+        #"WE1" WE code for work experience followed by count. 
+        weCount = 0
+        edCount = 0
+        certCount = 0
+        projCount = 0
+
+        for key in fields:
+            #slice list to look for object code
+            sliced = key[:2]
+            print(sliced)
+            if sliced == "WE":
+                weCount = extract_num(key)
+            elif sliced == "ED":
+                edCount = extract_num(key)
+            elif sliced == "CT":
+                certCount = extract_num(key)
+            elif sliced == "PJ":
+                projCount = extract_num(key)
+            
+        print(weCount)
+        print(edCount)
+        print(certCount)
+        print(projCount)
+
         summary = request.form['summary']
         link = request.form['link']
         skills = request.form['skills']
-        #Handle Work Experience
-        title = request.form['title']
-        company = request.form['company']
-        location = request.form['location']
-        start_date = request.form['start']
-        end_date = request.form['end']
-        job_summary = request.form['job-summary']
-        responsibil = request.form['responsibilities']
+        #Handle Work Experience - loop in the count amount of times contruct the key from the code + count + field
+        for i in range(weCount):
+            k = "WE" + str(i)
+        #Handle Education - 
+        for i in range(edCount):
+            k = "ED" + str(i)
+        #Handle Projects -
+        for i in range(certCount):
+            k = "CT" + str(i) 
+        #Handle Certifications -
+        for i in range(projCount):
+            k = "PJ" + str(i)
         error = None
-        #Handle Education
-        degree = request.form['degree']
-        institution = request.form['institution']
-        education_location = request.form['education_location']
-        graduation_date = request.form['graduation_date']
-        #Handle Projects
-        project_title = request.form['project_title']
-        project_description = request.form['project_description']
-        project_url = request.form['project_url']
-        #Handle Certifications
-        cert_title = request.form['cert_title']
-        issuer = request.form['issuer']
-        date_obtained = request.form['date_obtained']
 
         if not summary:
             error = "summary is required"
@@ -76,33 +100,16 @@ def create():
                 db_session.add(resume)
                 db_session.flush()
                 workexperience = WorkExperience(
-                    title=title, 
-                    company=company, 
-                    location=location, 
-                    start_date=start_date,
-                    end_date=end_date,
-                    summary=job_summary,
-                    responsibil=responsibil,
                     user_id=session.get('user_id'),
                     resume_id=resume.id,
                     )
-                education = Education(
-                    degree=degree,
-                    institution=institution,
-                    location=education_location,
-                    graduation_date=graduation_date, 
+                education = Education( 
                     resume_id=resume.id,
                 ) 
                 project = Project(
-                    title=project_title,
-                    description=project_description,
-                    url=project_url,
                     resume_id=resume.id,
                 )
                 cert = Certification(
-                    title=cert_title,
-                    issuer=issuer,
-                    date_obtained=date_obtained,
                     resume_id=resume.id,
                 )
                 db_session.add(workexperience)
