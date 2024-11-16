@@ -22,12 +22,40 @@ function addWorkExperience() {
     company.setAttribute("name", "WE"+  workExpCount +"company");
     company.setAttribute("placeholder", "Company");
 
+    let weLocation = document.createElement("input");
+    weLocation.setAttribute("type", "text");
+    weLocation.setAttribute("name", "WE"+  workExpCount +"location");
+    weLocation.setAttribute("placeholder", "location");
+
+    let weStartDate = document.createElement("input");
+    weStartDate.setAttribute("type", "text");
+    weStartDate.setAttribute("name", "WE"+  workExpCount +"startdate");
+    weStartDate.setAttribute("placeholder", "startdate");
+    
+    let weEndDate = document.createElement("input");
+    weEndDate.setAttribute("type", "text");
+    weEndDate.setAttribute("name", "WE"+  workExpCount +"enddate");
+    weEndDate.setAttribute("placeholder", "enddate");
+
+    let weResponsibilities = document.createElement("textarea")
+    weResponsibilities.setAttribute("name", "WE" + workExpCount + "responsibil")
+    weResponsibilities.setAttribute("placeholder", "responsibilities")
+
+    let weSummary = document.createElement("textarea")
+    weSummary.setAttribute("name", "WE" + workExpCount + "summary")
+    weSummary.setAttribute("placeholder", "summary")
+
     let header = document.createElement("h2");
     header.innerHTML= "Work Experience";
 
     dynmaicFormDiv.appendChild(header);
     dynmaicFormDiv.appendChild(title);
     dynmaicFormDiv.appendChild(company);
+    dynmaicFormDiv.appendChild(weLocation);
+    dynmaicFormDiv.appendChild(weStartDate);
+    dynmaicFormDiv.appendChild(weEndDate);
+    dynmaicFormDiv.appendChild(weSummary);
+    dynmaicFormDiv.appendChild(weResponsibilities);
     console.log("addWorkExperince function appended form into dynamic form div");
 }
 
@@ -47,16 +75,22 @@ function addEducation() {
     edLocation.setAttribute("name", "ED" + edCount + "location");
     edLocation.setAttribute("placeholder", "Location");
 
+    let edDegree = document.createElement("input");
+    edDegree.setAttribute("type", "text");
+    edDegree.setAttribute("name", "ED" + edCount + "degree");
+    edDegree.setAttribute("placeholder", "degree");
 
     let edDate = document.createElement("input");
     edDate.setAttribute("type", "text");
     edDate.setAttribute("name", "ED" + edCount + "date");
-    edDate.setAttribute("placeholder", "edDate");
+    edDate.setAttribute("placeholder", "date");
     
     dynmaicFormDiv.appendChild(edHeading);
+    dynmaicFormDiv.appendChild(edDegree);
     dynmaicFormDiv.appendChild(institution);
     dynmaicFormDiv.appendChild(edLocation);
     dynmaicFormDiv.appendChild(edDate);
+
     console.log("addEducation function appended form into dynamic form div");
 }
 
@@ -88,6 +122,7 @@ function addCertification() {
     dynmaicFormDiv.appendChild(certTitle);
     dynmaicFormDiv.appendChild(certIssuer);
     dynmaicFormDiv.appendChild(certDate);
+
     console.log("addCertification function appended form into dynamic form div");
 }
 
@@ -149,5 +184,3 @@ projectBtn.onclick = () => {
     addProjects();
 
 }
-
-

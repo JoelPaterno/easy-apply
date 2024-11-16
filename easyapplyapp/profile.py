@@ -71,14 +71,14 @@ def create():
         print("cert count = "+ str(certCount))
         print("proj count = "+ str(projCount))
 
+        name = request.form['name']
+        phone = request.form['phone']
+        address = request.form['address']
         summary = request.form['summary']
         link = request.form['link']
         skills = request.form['skills']
 
         error = None
-
-        if not summary:
-            error = "summary is required"
         
         if error is not None:
             flash(error)
@@ -92,10 +92,20 @@ def create():
                     k = "WE" + str(i)
                     we_title = request.form[k + "title"]
                     we_company = request.form[k + "company"]
+                    we_location = request.form[k + "location"]
+                    we_start = request.form[k + "startdate"]
+                    we_end = request.form[k + "enddate"]
+                    we_responsibil = request.form[k + "responsibil"]
+                    we_summary = request.form[k + "summary"]
                     #add to db
                     workexperience = WorkExperience(
                             title=we_title,
                             company=we_company,
+                            location=we_location,
+                            start_date=we_start,
+                            end_date=we_end,
+                            responsibil=we_responsibil,
+                            summary=we_summary,
                             user_id=session.get('user_id'),
                             resume_id=resume.id,
                         )
@@ -106,11 +116,13 @@ def create():
                     ed_institution = request.form[k + "institution"]
                     ed_location = request.form[k + "location"]
                     ed_date = request.form[k + "date"]
+                    ed_degree = request.form[k + "degree"]
                     #add to db
                     education = Education(
                             institution=ed_institution,
                             location=ed_location,
                             graduation_date=ed_date,
+                            degree=ed_degree,
                             resume_id=resume.id,
                         ) 
                     db_session.add(education)
@@ -203,11 +215,11 @@ def resume_serializer(id: int) -> dict:
         work_experience_dict = {
             "title": we.title,
             "company": we.company,
-            "location": we.company,
-            "startDate": we.company,
-            "endDate": we.company,
-            "summary": we.company,
-            #"responsibilities": [we.responsibil.split(", ")]
+            "location": we.location,
+            "startDate": we.start_date,
+            "endDate": we.end_date,
+            #"summary": we.summary,
+            "responsibilities": [we.responsibil.split(", ")]
         }
         resume_dict['work_experience'].append(work_experience_dict)
 
@@ -232,6 +244,7 @@ def resume_serializer(id: int) -> dict:
     print(f"SERIALISED RESUME DATA DICT - {resume_dict}")
     return resume_dict
 
+#test route for resume serialiser
 @bp.route('/test', methods=('GET',))
 @login_required
 def test():

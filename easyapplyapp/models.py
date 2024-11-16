@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Text
+from sqlalchemy.orm import relationship
 from .db import Base
 
 class User(Base):
@@ -13,21 +14,6 @@ class User(Base):
     
     def __repr__(self):
         return f'<User({self.name!r})>'
-class Resume(Base):
-    __tablename__ = 'resumes'
-    id = Column(Integer, primary_key=True)
-    summary = Column(String(500))
-    link = Column(String(100))
-    skills = Column(String(500))
-    user_id = Column(Integer, ForeignKey('users.id'))
-
-    def __init__(self, summary=None, link=None, skills=None, user_id=None):
-        self.summary=summary
-        self.link=link
-        self.skills=skills
-        self.user_id=user_id
-    def __repr__(self):
-        return f'<Resume(user_id = {self.user_id}, summary = {self.summary}, link = {self.link}, skills = {self.skills})>'
 class WorkExperience(Base):
     __tablename__ = 'workexperiences'
     id = Column(Integer, primary_key=True)
@@ -92,6 +78,26 @@ class Certification(Base):
         self.issuer = issuer
         self.date_obtained = date_obtained
         self.resume_id = resume_id
+
+class Resume(Base):
+    __tablename__ = 'resumes'
+    id = Column(Integer, primary_key=True)
+    summary = Column(String(500))
+    link = Column(String(100))
+    skills = Column(String(500))
+    user_id = Column(Integer, ForeignKey('users.id'))
+    workexperiences = relationship(WorkExperience, cascade="all, delete", backref="resume")
+    educations = relationship(Education, cascade="all, delete", backref="resume")
+    certifications = relationship(Certification, cascade="all, delete", backref="resume")
+    projects = relationship(Project, cascade="all, delete", backref="resume")
+
+    def __init__(self, summary=None, link=None, skills=None, user_id=None):
+        self.summary=summary
+        self.link=link
+        self.skills=skills
+        self.user_id=user_id
+    def __repr__(self):
+        return f'<Resume(user_id = {self.user_id}, summary = {self.summary}, link = {self.link}, skills = {self.skills})>'
 class Application(Base):
     __tablename__ = 'applications'
     id = Column(Integer, primary_key=True)

@@ -6,12 +6,20 @@
 
 {% block content %}
   <form method="post" id="createForm">
-    <label for="summary">Summary</label>
-    <input name="summary" id="summary" value="{{ request.form['summary'] }}" required>
+    <label for="name">Name</label>
+    <input name="name" id="name" placeholder="name">
+    <label for="email">email</label>
+    <input name="email" id="email" placeholder="email">
+    <label for="phone">Phone</label>
+    <input name="phone" id="phone" placeholder="phone">
+    <label for="address">Address</label>
+    <input name="address" id="address" placeholder="address">
+    <label for="link">link</label>
+    <input name="link" id="link" placeholder="link">
+    <label for="summary">summary</label>
+    <textarea name="summary" id="summary">{{ request.form['summary'] }}</textarea>
     <label for="skills">skills</label>
     <textarea name="skills" id="skills">{{ request.form['skills'] }}</textarea>
-    <label for="link">link</label>
-    <textarea name="link" id="link">{{ request.form['link'] }}</textarea>
     <input type="submit" value="Save">
   </form>
   <button class="add" id="addWE">Add Work Experience</button>
