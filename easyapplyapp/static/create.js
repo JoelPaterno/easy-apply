@@ -19,7 +19,7 @@ function addWorkExperience() {
 
     let company = document.createElement("input");
     company.setAttribute("type", "text");
-    company.setAttribute("name", "WE"+  workExpCount +" company");
+    company.setAttribute("name", "WE"+  workExpCount +"company");
     company.setAttribute("placeholder", "Company");
 
     let header = document.createElement("h2");
@@ -54,6 +54,7 @@ function addEducation() {
     edDate.setAttribute("placeholder", "edDate");
     
     dynmaicFormDiv.appendChild(edHeading);
+    dynmaicFormDiv.appendChild(institution);
     dynmaicFormDiv.appendChild(edLocation);
     dynmaicFormDiv.appendChild(edDate);
     console.log("addEducation function appended form into dynamic form div");

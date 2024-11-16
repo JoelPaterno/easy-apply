@@ -57,7 +57,6 @@ def create():
         for key in fields:
             #slice list to look for object code
             sliced = key[:2]
-            print(sliced)
             if sliced == "WE":
                 weCount = extract_num(key)
             elif sliced == "ED":
@@ -66,27 +65,16 @@ def create():
                 certCount = extract_num(key)
             elif sliced == "PJ":
                 projCount = extract_num(key)
-            
-        print(weCount)
-        print(edCount)
-        print(certCount)
-        print(projCount)
+
+        print("we count = "+ str(weCount))
+        print("ed count = "+ str(edCount))
+        print("cert count = "+ str(certCount))
+        print("proj count = "+ str(projCount))
 
         summary = request.form['summary']
         link = request.form['link']
         skills = request.form['skills']
-        #Handle Work Experience - loop in the count amount of times contruct the key from the code + count + field
-        for i in range(weCount):
-            k = "WE" + str(i)
-        #Handle Education - 
-        for i in range(edCount):
-            k = "ED" + str(i)
-        #Handle Projects -
-        for i in range(certCount):
-            k = "CT" + str(i) 
-        #Handle Certifications -
-        for i in range(projCount):
-            k = "PJ" + str(i)
+
         error = None
 
         if not summary:
@@ -99,26 +87,67 @@ def create():
                 resume = Resume(summary=summary, link=link, skills=skills, user_id=cur_user_id)
                 db_session.add(resume)
                 db_session.flush()
-                workexperience = WorkExperience(
-                    user_id=session.get('user_id'),
-                    resume_id=resume.id,
-                    )
-                education = Education( 
-                    resume_id=resume.id,
-                ) 
-                project = Project(
-                    resume_id=resume.id,
-                )
-                cert = Certification(
-                    resume_id=resume.id,
-                )
-                db_session.add(workexperience)
-                db_session.add(education)
-                db_session.add(project)
-                db_session.add(cert)
+                #Handle Work Experience
+                for i in range(1, weCount + 1):
+                    k = "WE" + str(i)
+                    we_title = request.form[k + "title"]
+                    we_company = request.form[k + "company"]
+                    #add to db
+                    workexperience = WorkExperience(
+                            title=we_title,
+                            company=we_company,
+                            user_id=session.get('user_id'),
+                            resume_id=resume.id,
+                        )
+                    db_session.add(workexperience)
+                #Handle Education
+                for i in range(1, edCount + 1):
+                    k = "ED" + str(i)
+                    ed_institution = request.form[k + "institution"]
+                    ed_location = request.form[k + "location"]
+                    ed_date = request.form[k + "date"]
+                    #add to db
+                    education = Education(
+                            institution=ed_institution,
+                            location=ed_location,
+                            graduation_date=ed_date,
+                            resume_id=resume.id,
+                        ) 
+                    db_session.add(education)
+                #Handle Projects
+                for i in range(1, certCount + 1):
+                    k = "CT" + str(i) 
+                    ct_title = request.form[k + "title"]
+                    ct_issuer = request.form[k + "issuer"]
+                    ct_date = request.form[k + "date"]
+                    #add to db
+                    cert = Certification(
+                            title=ct_title,
+                            issuer=ct_issuer,
+                            date_obtained=ct_date,
+                            resume_id=resume.id,
+                        )
+                    db_session.add(cert)
+                    
+                #Handle Certifications
+                for i in range(1, projCount + 1):
+                    k = "PJ" + str(i)
+                    pj_title = request.form[k + "title"]
+                    pj_desc = request.form[k + "description"]
+                    pj_url = request.form[k + "url"]
+                    pj_date = request.form[k + "date"]
+                    #add to db
+                    project = Project(
+                            title=pj_title,
+                            description=pj_desc,
+                            url=pj_url,
+                            resume_id=resume.id,
+                        )
+                    db_session.add(project)
                 db_session.commit()
-            except:
+            except Exception as e:
                 flash("unable to add resume data to the database")
+                print(e)
             return redirect(url_for('profile.index'))   
     return render_template('app/create.html', user=user)
 
@@ -178,7 +207,7 @@ def resume_serializer(id: int) -> dict:
             "startDate": we.company,
             "endDate": we.company,
             "summary": we.company,
-            "responsibilities": [we.responsibil.split(", ")]
+            #"responsibilities": [we.responsibil.split(", ")]
         }
         resume_dict['work_experience'].append(work_experience_dict)
 
@@ -203,11 +232,18 @@ def resume_serializer(id: int) -> dict:
     print(f"SERIALISED RESUME DATA DICT - {resume_dict}")
     return resume_dict
 
+@bp.route('/test', methods=('GET',))
+@login_required
+def test():
+    resume_dict = resume_serializer(4)
+    print(resume_dict)
+    return redirect(url_for('profile.index'))
 
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
+    
     print(f"requested resume id: {id}")
     resume = get_resume(id)
 
