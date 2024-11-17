@@ -371,3 +371,33 @@ def start_application(id):
     db_session.commit()
     #redirect to applications
     return redirect(url_for('profile.apply'))
+
+@bp.route('/<int:id>/updateapp', methods=('POST', 'GET'))
+@login_required
+def update_application(id):
+    application = Application.query.filter(Application.id == id).first()
+    cover_letter_data = json.loads(application.cover_letter_data)
+    resume_data = json.loads(application.resume_data)
+    resume_skills = resume_data['skills']
+    if request.method == 'POST':
+        resume_data['skills'] = request.form['skills']
+        cover_letter_data['intro'] = request.form['intro']
+        cover_letter_data['lead_in'] = request.form['lead_in']
+        cover_letter_data['points'] = request.form['points']
+        cover_letter_data['outro'] = request.form['outro']
+        #edit cover letter data and resume skills
+        application.resume_data = json.dumps(resume_data)
+        print("EDITING RESUME DATA TO - " + json.dumps(resume_data))
+        application.cover_letter_data = json.dumps(cover_letter_data)
+        print("EDITING CL DATA TO - " + json.dumps(cover_letter_data))
+        db_session.commit()
+        return redirect(url_for('profile.apply'))
+    return render_template('app/update_application.html', application=application, cover_letter_data=cover_letter_data, resume_skills=resume_skills)
+
+@bp.route('/<int:id>/deleteapp', methods=('POST',))
+@login_required
+def delete_app(id):
+    application = Application.query.filter(Application.id == id).first()
+    db_session.delete(application)
+    db_session.commit()
+    return redirect(url_for('profile.apply'))

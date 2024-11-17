@@ -33,7 +33,9 @@
             <h3>Cover Letter Data</h3>
             <p>{{ application.cover_letter_data }}</p>
             <br>
-            <p>TODO: Link to edit Resume and Cover Letter</p>
+            {%if user.id == resume.user_id %}
+                <a class="action" href="{{ url_for('profile.update_application', id=application.id) }}">Edit</a>
+            {% endif %}
             {% if user.id == resume.user_id %}
                 <a class="action" href="{{ url_for('profile.start_application', id=application.id) }}">Apply</a>
             {% endif %}

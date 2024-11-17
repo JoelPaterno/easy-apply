@@ -1,5 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Letter</title>
     <style>
+        /* Screen styles */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -60,7 +66,61 @@
         .closing {
             margin-top: 30px;
         }
-        
+
+        /* Print-specific styles */
+        @media print {
+            body {
+                background: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                width: 100%;
+                max-width: none;
+                margin: 0;
+                padding: 20px;
+                box-shadow: none;
+            }
+
+            a {
+                color: #000;
+                text-decoration: none;
+            }
+
+            h1 {
+                color: #000;
+            }
+
+            /* Ensure page breaks don't occur in awkward places */
+            h1, .salutation, .closing {
+                page-break-after: avoid;
+            }
+
+            .body-content {
+                page-break-inside: avoid;
+            }
+
+            /* Remove any background colors and shadows for better printing */
+            * {
+                background: transparent !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+
+            /* Show the URL after links when printing */
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+                font-size: 90%;
+            }
+
+            /* Hide navigation elements if any are added later */
+            nav, .navigation {
+                display: none;
+            }
+        }
+
+        /* Mobile responsiveness */
         @media (max-width: 768px) {
             .container {
                 width: 95%;
@@ -71,33 +131,35 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>{{ name }}</h1>
-            <p>{{ email }} | {{ phone }} | {{ address }}</p>
-            <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
-        </header>
+        <main>
+            <header>
+                <h1>{{ name }}</h1>
+                <p>{{ email }} | {{ phone }} | {{ address }}</p>
+                <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
+            </header>
 
-        <main class="letter-content">
-            <p class="date">{{ current_date }}</p>
+            <div class="letter-content">
+                <p class="date">{{ current_date }}</p>
 
-            <p class="salutation">{{ salutation }}</p>
+                <p class="salutation">{{ salutation }}</p>
 
-            <div class="body-content">
-                <p>{{ intro }}</p>
-                <p>{{ lead_in }}</p>
-                <ul>
-                    {% for point in points %}
-                    <li>{{ point }}</li>
-                    <br/>
-                    {% endfor %}
-                </ul>
-                <p>{{ outro }}</p>
+                <div class="body-content">
+                    <p>{{ intro }}</p>
+                    <p>{{ lead_in }}</p>
+                    <ul>
+                        {% for point in points %}
+                        <li>{{ point }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p>{{ outro }}</p>
+                </div>
+
+                <p class="closing">
+                    {{ signature }}<br>
+                    {{ name }}
+                </p>
             </div>
-
-            <p class="closing">
-                {{ signature }}<br>
-                {{ name }}
-            </p>
         </main>
     </div>
 </body>
+</html>

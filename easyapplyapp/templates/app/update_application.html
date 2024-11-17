@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit "{{ application.company }} {{ application.role }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="skills">skills</label>
+    <textarea name="skills" id="skills">{{ resume_skills }}</textarea>
+    <label for="intro">intro</label>
+    <h2>Cover Letter</h2>
+    <textarea name="intro" id="intro">{{ cover_letter_data['intro'] }}</textarea>
+    <label for="lead_in">lead_in</label>
+    <textarea name="lead_in" id="lead_in">{{ cover_letter_data['lead_in'] }}</textarea>
+    <label for="points">points</label>
+    {% for point in cover_letter_data['points'] %}
+        <textarea name="points" id="points">{{ point }}</textarea>
+    {% endfor%}
+    <label for="outro">outro</label>
+    <textarea name="outro" id="outro">{{ cover_letter_data['outro'] }}</textarea>
+    <input type="submit" value="Save">
+  </form>
+  <hr>
+  <form action="{{ url_for('profile.delete_app', id=application.id) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}
