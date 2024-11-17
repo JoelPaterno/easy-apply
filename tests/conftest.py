@@ -4,6 +4,7 @@ import tempfile
 import pytest
 from easyapplyapp import create_app
 from easyapplyapp.db import db_session, init_db
+from easyapplyapp.models import User
 
 @pytest.fixture
 def app():
@@ -17,6 +18,12 @@ def app():
     with app.app_context():
         init_db()
         #add data to test db using db_session
+        
+        user1 = User(name='test', password='pbkdf2:sha256:50000$TCI4GzcX$0de171a4f4dac32e3364c7ddc7c14f3e2fa61f2d17574483f7ffbb431b4acb2f')
+        user2 = User(name='other', password='pbkdf2:sha256:50000$kJPKsz6N$d2d4784f1b030a9761f5ccaeeaca413f27f2ecb76d6168407af962ddce849f79')
+        db_session.add(user1)
+        db_session.add(user2)
+        db_session.commit()
     yield app
 
     os.close(db_fd)

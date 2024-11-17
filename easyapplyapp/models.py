@@ -82,6 +82,10 @@ class Certification(Base):
 class Resume(Base):
     __tablename__ = 'resumes'
     id = Column(Integer, primary_key=True)
+    name = Column(String(500))
+    email = Column(String(500))
+    phone = Column(String(500))
+    address = Column(String(500))
     summary = Column(String(500))
     link = Column(String(100))
     skills = Column(String(500))
@@ -91,7 +95,11 @@ class Resume(Base):
     certifications = relationship(Certification, cascade="all, delete", backref="resume")
     projects = relationship(Project, cascade="all, delete", backref="resume")
 
-    def __init__(self, summary=None, link=None, skills=None, user_id=None):
+    def __init__(self, name=None, email=None, phone=None, address=None, summary=None, link=None, skills=None, user_id=None):
+        self.name=name
+        self.email=email
+        self.phone=phone
+        self.address=address
         self.summary=summary
         self.link=link
         self.skills=skills

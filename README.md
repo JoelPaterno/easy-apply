@@ -10,3 +10,6 @@ https://stackoverflow.com/questions/2332100/how-to-add-page-break-dyanamically-t
 aws s3 files in flask
 https://www.youtube.com/watch?v=tSfdQJvTKmk
 https://www.youtube.com/watch?v=I_fTQTsz2nQ
+Testing with sqlalchemy db
+https://stackoverflow.com/questions/17791571/how-can-i-test-a-flask-application-which-uses-sqlalchemy 
+https://pythonhosted.org/Flask-Testing/

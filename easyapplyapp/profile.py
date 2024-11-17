@@ -73,6 +73,7 @@ def create():
 
         name = request.form['name']
         phone = request.form['phone']
+        email = request.form['email']
         address = request.form['address']
         summary = request.form['summary']
         link = request.form['link']
@@ -84,7 +85,7 @@ def create():
             flash(error)
         else:
             try:
-                resume = Resume(summary=summary, link=link, skills=skills, user_id=cur_user_id)
+                resume = Resume(name=name, phone=phone, address=address, email=email, summary=summary, link=link, skills=skills, user_id=cur_user_id)
                 db_session.add(resume)
                 db_session.flush()
                 #Handle Work Experience
@@ -183,10 +184,10 @@ def resume_serializer(id: int) -> dict:
     resume = get_resume(id)
     user = User.query.filter(User.id == resume.user_id).first()
     resume_dict = {
-        'name': user.name,
-        'email': '',
-        'phone': '',
-        'address': '',
+        'name': resume.name,
+        'email': resume.email,
+        'phone': resume.phone,
+        'address': resume.address,
         'website_link': resume.link,
         'summary': resume.summary,
         'education': [],
@@ -218,8 +219,8 @@ def resume_serializer(id: int) -> dict:
             "location": we.location,
             "startDate": we.start_date,
             "endDate": we.end_date,
-            #"summary": we.summary,
-            "responsibilities": [we.responsibil.split(", ")]
+            "summary": we.summary,
+            "responsibilities": we.responsibil.split(", ")
         }
         resume_dict['work_experience'].append(work_experience_dict)
 
@@ -241,14 +242,14 @@ def resume_serializer(id: int) -> dict:
         }
         resume_dict['certifications'].append(cert_dict)
 
-    print(f"SERIALISED RESUME DATA DICT - {resume_dict}")
+    #print(f"SERIALISED RESUME DATA DICT - {resume_dict}")
     return resume_dict
 
 #test route for resume serialiser
 @bp.route('/test', methods=('GET',))
 @login_required
 def test():
-    resume_dict = resume_serializer(4)
+    resume_dict = resume_serializer(1)
     print(resume_dict)
     return redirect(url_for('profile.index'))
 
@@ -325,19 +326,14 @@ def apply():
 def start_application(id):
     #get application
     application = Application.query.filter(Application.id == id).first()
+    resume = Resume.query.filter(Resume.user_id == session.get("user_id")).first()
     #load in resume data from the json file
     cwd = os.getcwd()
-    json_path = os.path.join(cwd, 'easyapplyapp','services', 'resume_data.json')
 
     if application.resume_data is None:
         #TODO: Modify this to call resume_serialiser() with the first resume. a resume data dict will be returned which can then be used the same as the loaded json file.
-        try:
-            with open(json_path) as f:
-                    resume_data = json.load(f)
-        except Exception as e:
-            print(e)
-        finally:
-            "Unknown error start route"
+        resume_data = resume_serializer(resume.id)
+        print("RESUME DATA LOADED IN FOR LLM BY SERIALISER - " + json.dumps(resume_data))
     else: 
         resume_data = json.loads(application.resume_data)
     #call llm handler generate_resume_skills -> list of skills
@@ -351,6 +347,14 @@ def start_application(id):
     #call llm handler generate_cover_letter -> dict cover letter. 
     if application.cover_letter_data is None:
         cover_letter = llm_handler.generate_cover_letter(job_description=application.description, resume=resume_data_str)
+        #get these details from the selected resume. 
+        cover_letter['name'] = resume_data['name']
+        cover_letter['email'] = resume_data['email']
+        cover_letter['phone'] = resume_data['phone']
+        cover_letter['address'] = resume_data['address']
+        cover_letter['website'] = resume_data['website_link']
+        cover_letter['saultation'] = "Dear Hiring Manager"
+        print(cover_letter)
         application.cover_letter_data = json.dumps(cover_letter)
     else:
         cover_letter = json.loads(application.cover_letter_data)
