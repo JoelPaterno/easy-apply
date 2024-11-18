@@ -6,8 +6,6 @@
 
 {% block content %}
     <form method="post">
-        <label for="role">Role Title</label> 
-        <input type="text" name="role" id="role">
         <label for="link">Job Link</label> 
         <input type="url" name="link" id="link">
         <label for="paste">Paste a Job Description</label>
@@ -28,15 +26,14 @@
             <p>{{ application.description }}</p>
             <br>
             <br>
-            {%if user.id == resume.user_id %}
+            {% if application.resume_file_path is none %}
+                <a class="action" href="{{ url_for('profile.start_application', id=application.id) }}">Prepare Application</a>
+            {% else %}
                 <a class="action" href="{{ url_for('profile.update_application', id=application.id) }}">View and Edit</a>
-            {% endif %}
-            {% if user.id == resume.user_id %}
-                <a class="action" href="{{ url_for('profile.start_application', id=application.id) }}">Apply</a>
-            {% endif %}
-            <a class="action" href="{{ url_for('profile.resume_dl', id=application.id) }}">Download Resume</a>
-            <a class="action" href="{{ url_for('profile.coverletter_dl', id=application.id) }}" download>Download Cover Letter</a>
-            <a class="action" href="{{ url_for('profile.regenerate', id=application.id) }}">Regenarate Docs</a>
+                <a class="action" href="{{ url_for('profile.resume_dl', id=application.id) }}">Download Resume</a>
+                <a class="action" href="{{ url_for('profile.coverletter_dl', id=application.id) }}" download>Download Cover Letter</a>
+                <a class="action" href="{{ url_for('profile.regenerate', id=application.id) }}">Regenarate Docs</a>
+            {% endif  %}
         </div>
     {% endfor %}
     <script src="{{ url_for('static', filename='apply.js') }}"></script>
