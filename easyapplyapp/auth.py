@@ -25,6 +25,7 @@ def register():
                     user = User(name=username, password=generate_password_hash(password))
                     db_session.add(user)
                     db_session.commit()
+                    error = "Please login via the login page"
                 except:
                     error = f"Unable to add user {username} to database"
             else:

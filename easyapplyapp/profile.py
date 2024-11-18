@@ -300,7 +300,10 @@ def apply():
         link = request.form['link']
         description = request.form['paste']
 
-        application_data = llm_handler.create_job_application(description)
+        try:
+            application_data = llm_handler.create_job_application(description)
+        except Exception as e:
+            print(e)
         role = application_data['role']
         location = application_data['location']
         company = application_data['company']
@@ -354,6 +357,7 @@ def start_application(id):
         cover_letter['address'] = resume_data['address']
         cover_letter['website'] = resume_data['website_link']
         cover_letter['saultation'] = "Dear Hiring Manager"
+        cover_letter['signature'] = "Sincerely,"
         print(cover_letter)
         application.cover_letter_data = json.dumps(cover_letter)
     else:

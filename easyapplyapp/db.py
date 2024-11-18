@@ -1,8 +1,15 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker, declarative_base
 import click
+from dotenv import load_dotenv
+import os
 
-engine = create_engine('sqlite:///database.db')
+load_dotenv()
+DB_USERNAME = os.getenv("DB_USERNAME")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_ADDRESS = os.getenv("DB_ADDRESS")
+
+engine = create_engine(f'mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_ADDRESS}/initial_database')
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
