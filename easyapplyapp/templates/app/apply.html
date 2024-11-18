@@ -27,20 +27,16 @@
             <h3>Description</h3>
             <p>{{ application.description }}</p>
             <br>
-            <h3>Resume Data</h3>
-            <p>{{ application.resume_data }}</p>
-            <br>
-            <h3>Cover Letter Data</h3>
-            <p>{{ application.cover_letter_data }}</p>
             <br>
             {%if user.id == resume.user_id %}
-                <a class="action" href="{{ url_for('profile.update_application', id=application.id) }}">Edit</a>
+                <a class="action" href="{{ url_for('profile.update_application', id=application.id) }}">View and Edit</a>
             {% endif %}
             {% if user.id == resume.user_id %}
                 <a class="action" href="{{ url_for('profile.start_application', id=application.id) }}">Apply</a>
             {% endif %}
-            <a class="action" href="{{ application.resume_file_path }}" target="_blank">Open Resume</a>
-            <a class="action" href="{{ application.cover_letter_file_path }}" target="_blank">Open Cover Letter</a>
+            <a class="action" href="{{ url_for('profile.resume_dl', id=application.id) }}">Download Resume</a>
+            <a class="action" href="{{ url_for('profile.coverletter_dl', id=application.id) }}" download>Download Cover Letter</a>
+            <a class="action" href="{{ url_for('profile.regenerate', id=application.id) }}">Regenarate Docs</a>
         </div>
     {% endfor %}
     <script src="{{ url_for('static', filename='apply.js') }}"></script>

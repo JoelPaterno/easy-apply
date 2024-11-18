@@ -7,12 +7,27 @@ h3 {
     margin: 1rem;
 }
 a { color: #377ba8; }
+.action {
+    display: block;
+    text-align: center;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 10px;
+    background-color: #444;
+    color: #eee;
+    width: 50%;
+}
+
+.action:hover {
+    background-color: lightgray;
+    color: #444;
+}
 hr { border: none; border-top: 1px solid lightgray; }
 nav { background: lightgray; display: flex; align-items: center; padding: 0 0.5rem; border-radius: 10px;}
 nav h1 { flex: auto; margin: 0; }
 nav h1 a { text-decoration: none; padding: 0.25rem 0.5rem; }
 nav ul  { display: flex; list-style: none; margin: 0; padding: 0; }
-nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
+nav ul li a, nav ul li span, header { display: block; padding: 0.5rem; }
 .content { padding: 0 1rem 1rem; border-radius: 10px;}
 .content > header { border-bottom: 1px solid lightgray; display: flex; align-items: flex-end; border-radius: 10px;}
 .content > header h1 { flex: auto; margin: 1rem 0 0.25rem 0; }
@@ -28,6 +43,13 @@ nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
 .content input, .content textarea { margin-bottom: 1em; }
 .content textarea { min-height: 12em; resize: vertical; }
 input.danger { color: #cc2f2e; }
+
+iframe {
+    width: 90%;
+    height: 50vh;
+    margin: 20px;
+    border-radius: 10px;
+}
 
 input {
     border-radius: 10px;

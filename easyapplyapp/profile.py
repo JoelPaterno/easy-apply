@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for, session
+from flask import Blueprint, flash, redirect, render_template, request, url_for, session, send_from_directory
 from werkzeug.exceptions import abort
 from .auth import login_required
 from .db import db_session
@@ -330,7 +330,6 @@ def start_application(id):
     #get application
     application = Application.query.filter(Application.id == id).first()
     resume = Resume.query.filter(Resume.user_id == session.get("user_id")).first()
-    #load in resume data from the json file
     cwd = os.getcwd()
 
     if application.resume_data is None:
@@ -395,8 +394,23 @@ def update_application(id):
         application.cover_letter_data = json.dumps(cover_letter_data)
         print("EDITING CL DATA TO - " + json.dumps(cover_letter_data))
         db_session.commit()
-        return redirect(url_for('profile.apply'))
-    return render_template('app/update_application.html', application=application, cover_letter_data=cover_letter_data, resume_skills=resume_skills)
+        regenerate(id=application.id)
+        return redirect(url_for('profile.update_application' , id=id))
+
+    with open(application.resume_file_path, "r") as resume:
+        resume_html = resume.read()
+    
+    with open(application.cover_letter_file_path) as cl:
+        coverletter_html = cl.read()
+
+    return render_template(
+        'app/update_application.html', 
+        application=application, 
+        cover_letter_data=cover_letter_data, 
+        resume_skills=resume_skills,
+        resume_html=resume_html,
+        coverletter_html=coverletter_html,
+        )
 
 @bp.route('/<int:id>/deleteapp', methods=('POST',))
 @login_required
@@ -405,3 +419,53 @@ def delete_app(id):
     db_session.delete(application)
     db_session.commit()
     return redirect(url_for('profile.apply'))
+
+
+@bp.route('/<int:id>/regenrate', methods=('GET',))
+@login_required
+def regenerate(id):
+    application = Application.query.filter(Application.id == id).first()
+    cwd = os.getcwd()
+    #get data for cl and resume
+    resume_data = json.loads(application.resume_data)
+    #parse skills string
+    resume_data['skills'] = resume_data['skills'].strip("[]")
+    resume_data['skills'] = resume_data['skills'].split("'")
+    print(json.dumps(resume_data, indent=2))
+    cover_letter = json.loads(application.cover_letter_data)
+    #parse points string
+    cover_letter['points'] = cover_letter['points'].strip("[]")
+    cover_letter['points'] = cover_letter['points'].split("'")
+    print(json.dumps(cover_letter, indent=2))
+
+    #call pdf generate functions
+    resume_path = generate_resume(resume_data=resume_data, appfilepath=cwd)
+    application.resume_file_path = resume_path
+
+    cover_letter_path = generate_cover_letter(cover_letter_dict=cover_letter, appfilepath=cwd)
+    application.cover_letter_file_path = cover_letter_path
+
+    db_session.commit()
+    return redirect(url_for('profile.apply'))
+
+@bp.route('/<int:id>/resumedl', methods=('GET',))
+@login_required
+def resume_dl(id):
+    application = Application.query.filter(Application.id == id).first()
+    cwd = os.getcwd()
+    resume_folder = os.path.join(cwd, 'easyapplyapp', 'files', 'resumes')
+    resume_filename = application.resume_file_path[-25:]
+    print(resume_filename)
+    return send_from_directory(resume_folder, resume_filename, as_attachment=True)
+
+@bp.route('/<int:id>/coverletterdl', methods=('GET',))
+@login_required
+def coverletter_dl(id):
+    application = Application.query.filter(Application.id == id).first()
+    cwd = os.getcwd()
+    coverletter_folder = os.path.join(cwd, 'easyapplyapp', 'files', 'coverletters')
+    coverletter_filename = application.cover_letter_file_path[-25:]
+    print(coverletter_filename)
+    return send_from_directory(coverletter_folder, coverletter_filename, as_attachment=True)
+
+

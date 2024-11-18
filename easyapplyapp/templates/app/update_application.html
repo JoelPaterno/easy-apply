@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Edit "{{ application.company }} {{ application.role }}"{% endblock %}</h1>
+  <h1>{% block title %}{{ application.company }} {{ application.role }}{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
+  <iframe srcdoc="{{ resume_html }}"></iframe>
+  <iframe srcdoc="{{ coverletter_html }}"></iframe>
   <form method="post">
     <label for="skills">skills</label>
     <textarea name="skills" id="skills">{{ resume_skills }}</textarea>
@@ -14,14 +16,14 @@
     <label for="lead_in">lead_in</label>
     <textarea name="lead_in" id="lead_in">{{ cover_letter_data['lead_in'] }}</textarea>
     <label for="points">points</label>
-    {% for point in cover_letter_data['points'] %}
-        <textarea name="points" id="points">{{ point }}</textarea>
-    {% endfor%}
+    <textarea name="points" id="points">{{ cover_letter_data.points }}</textarea>
     <label for="outro">outro</label>
     <textarea name="outro" id="outro">{{ cover_letter_data['outro'] }}</textarea>
-    <input type="submit" value="Save">
+    <input type="submit" value="Save and Regenerate Docs">
   </form>
   <hr>
+  <a class="action" href="{{ url_for('profile.resume_dl', id=application.id) }}">Download Resume</a>
+  <a class="action" href="{{ url_for('profile.coverletter_dl', id=application.id) }}" download>Download Cover Letter</a>
   <form action="{{ url_for('profile.delete_app', id=application.id) }}" method="post">
     <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
   </form>

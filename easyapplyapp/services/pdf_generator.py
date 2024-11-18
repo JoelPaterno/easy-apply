@@ -6,6 +6,7 @@ from easyapplyapp.services import llm_handler
 from easyapplyapp.models import Application
 import random
 import string
+import boto3
 
 def generate_filename():
      chars = string.ascii_lowercase + string.digits
@@ -36,8 +37,7 @@ def generate_cover_letter(cover_letter_dict: dict, appfilepath=None) -> str:
         return os.path.join(output_path, f'{filename}.html')
     except Exception as e:
          print(e)
-    finally: 
-         "Unknown error pdf_generator generate_cover_letter()"
+
 
 
 def generate_resume(resume_data: dict, appfilepath=None) -> str:
@@ -59,10 +59,8 @@ def generate_resume(resume_data: dict, appfilepath=None) -> str:
         with open(f'{filename}.html', 'w') as f:
                 f.write(output_text)
         os.chdir(appfilepath)
-        print("FILE GENERATED TO RESUME -- " + output_path + '\\' + f'{filename}.html')
+        print("FILE GENERATED RESUME -- " + output_path + '\\' + f'{filename}.html')
         return os.path.join(output_path, f'{filename}.html')
     except Exception as e:
-         print(e)
-    finally: 
-         "Unknown error pdf_generator generate_resume()"
+        print(e)
     
