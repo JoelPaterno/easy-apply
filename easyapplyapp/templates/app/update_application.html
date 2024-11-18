@@ -9,14 +9,18 @@
   <iframe srcdoc="{{ coverletter_html }}"></iframe>
   <form method="post">
     <label for="skills">skills</label>
-    <textarea name="skills" id="skills">{{ resume_skills }}</textarea>
-    <label for="intro">intro</label>
+    {% for skill in resume_skills %}
+      <input name="skill{{skill[0]}}" value="{{ skill[1] }}">
+    {% endfor %}
     <h2>Cover Letter</h2>
+    <label for="intro">intro</label>
     <textarea name="intro" id="intro">{{ cover_letter_data['intro'] }}</textarea>
     <label for="lead_in">lead_in</label>
     <textarea name="lead_in" id="lead_in">{{ cover_letter_data['lead_in'] }}</textarea>
     <label for="points">points</label>
-    <textarea name="points" id="points">{{ cover_letter_data.points }}</textarea>
+    {% for point in cover_letter_data.points %}
+      <textarea name="point{{point[0]}}" id="point">{{ point[1] }}</textarea>
+    {% endfor %}
     <label for="outro">outro</label>
     <textarea name="outro" id="outro">{{ cover_letter_data['outro'] }}</textarea>
     <input type="submit" value="Save and Regenerate Docs">

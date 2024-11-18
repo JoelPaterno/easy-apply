@@ -3,7 +3,6 @@ from werkzeug.exceptions import abort
 from .auth import login_required
 from .db import db_session
 from .models import Resume, User, WorkExperience, Application, Education, Certification, Project
-from sqlalchemy import update
 from easyapplyapp.services import llm_handler
 from easyapplyapp.services.pdf_generator import generate_cover_letter, generate_resume
 import json
@@ -12,6 +11,7 @@ import os
 bp = Blueprint('profile', __name__)
 
 @bp.route('/')
+@login_required
 def index():
     cur_user_id = session.get('user_id')
     user = User.query.filter(User.id == cur_user_id).first()
@@ -381,18 +381,49 @@ def update_application(id):
     application = Application.query.filter(Application.id == id).first()
     cover_letter_data = json.loads(application.cover_letter_data)
     resume_data = json.loads(application.resume_data)
-    resume_skills = resume_data['skills']
+    resume_skills = enumerate(resume_data['skills'])
+    cover_letter_data['points'] = enumerate(cover_letter_data['points'])
     if request.method == 'POST':
-        resume_data['skills'] = request.form['skills']
+        #print(request.headers)
+        fields = [k for k in request.form]
+        values = [request.form[k] for k in request.form]
+        data = dict(zip(fields, values))
+        print(data)
+
+        skillCount = 0
+        pointsCount = 0
+
+        for key in fields:
+            check = key[:5]
+            sliced = key[5:]
+            if check == "skill" and int(sliced) > skillCount:
+                skillCount = int(sliced)
+            elif check == "point" and int(sliced) > pointsCount:
+                pointsCount = int(sliced)
+
+        skills = []
+        points = []
+        #TODO: loop through skills and points and populate
+        for skill in range(skillCount):
+            print(request.form['skill'+str(skill)])
+            skills.append(request.form['skill'+str(skill)])
+        for point in range(pointsCount + 1):
+            print(request.form['point'+str(point)])
+            points.append(request.form['point'+str(point)])
+        #print("Skills  -- " + str(list(skills)))
+        #print("cl points -- " + str(list(points)))
+        #parse skills
+        resume_data['skills'] = skills
         cover_letter_data['intro'] = request.form['intro']
         cover_letter_data['lead_in'] = request.form['lead_in']
-        cover_letter_data['points'] = request.form['points']
+        #parse points
+        cover_letter_data['points'] = points
         cover_letter_data['outro'] = request.form['outro']
         #edit cover letter data and resume skills
         application.resume_data = json.dumps(resume_data)
-        print("EDITING RESUME DATA TO - " + json.dumps(resume_data))
+        #print("EDITING RESUME DATA TO - " + json.dumps(resume_data))
         application.cover_letter_data = json.dumps(cover_letter_data)
-        print("EDITING CL DATA TO - " + json.dumps(cover_letter_data))
+        #print("EDITING CL DATA TO - " + json.dumps(cover_letter_data))
         db_session.commit()
         regenerate(id=application.id)
         return redirect(url_for('profile.update_application' , id=id))
@@ -429,19 +460,29 @@ def regenerate(id):
     #get data for cl and resume
     resume_data = json.loads(application.resume_data)
     #parse skills string
-    resume_data['skills'] = resume_data['skills'].strip("[]")
-    resume_data['skills'] = resume_data['skills'].split("'")
-    print(json.dumps(resume_data, indent=2))
+    #print(resume_data['skills'])
+    #print(json.dumps(resume_data, indent=2))
+
+
     cover_letter = json.loads(application.cover_letter_data)
     #parse points string
-    cover_letter['points'] = cover_letter['points'].strip("[]")
-    cover_letter['points'] = cover_letter['points'].split("'")
-    print(json.dumps(cover_letter, indent=2))
+    #print(cover_letter['points'])
+    #print(json.dumps(cover_letter, indent=2))
 
     #call pdf generate functions
+    if os.path.exists(application.resume_file_path):
+        os.remove(application.resume_file_path)
+        print("resume file deleted")
+    else:
+        print("file not deleted -- the file does not exists")
     resume_path = generate_resume(resume_data=resume_data, appfilepath=cwd)
     application.resume_file_path = resume_path
 
+    if os.path.exists(application.cover_letter_file_path):
+        os.remove(application.cover_letter_file_path)
+        print("cover_letter file deleted")
+    else:
+        print("file not deleted -- the file does not exists")
     cover_letter_path = generate_cover_letter(cover_letter_dict=cover_letter, appfilepath=cwd)
     application.cover_letter_file_path = cover_letter_path
 
@@ -455,7 +496,7 @@ def resume_dl(id):
     cwd = os.getcwd()
     resume_folder = os.path.join(cwd, 'easyapplyapp', 'files', 'resumes')
     resume_filename = application.resume_file_path[-25:]
-    print(resume_filename)
+    #print(resume_filename)
     return send_from_directory(resume_folder, resume_filename, as_attachment=True)
 
 @bp.route('/<int:id>/coverletterdl', methods=('GET',))
@@ -465,7 +506,7 @@ def coverletter_dl(id):
     cwd = os.getcwd()
     coverletter_folder = os.path.join(cwd, 'easyapplyapp', 'files', 'coverletters')
     coverletter_filename = application.cover_letter_file_path[-25:]
-    print(coverletter_filename)
+    #print(coverletter_filename)
     return send_from_directory(coverletter_folder, coverletter_filename, as_attachment=True)
 
 
