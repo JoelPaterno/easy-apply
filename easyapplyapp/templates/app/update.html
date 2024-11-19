@@ -24,58 +24,58 @@
     <h2>Work Experince</h2>
       {% for we in workexperiences %}
         <h3>{{ we.title }}</h3>
-        <label for="title">title</label>
-        <input name="title" id="title" value="{{ we.title }}">
-        <label for="company">company</label>
-        <input name="company" id="company" value="{{ we.company }}">
-        <label for="location">location</label>
-        <input name="location" id="location" value="{{ we.location }}">
-        <label for="start_date">start_date</label>
-        <input name="start_date" id="start_date" value="{{ we.start_date }}">
-        <label for="end_date">end_date</label>
-        <input name="end_date" id="end_date" value="{{ we.end_date }}">
-        <label for="summary">summary</label>
-        <textarea name="summary" id="summary">{{ resume.summary }}</textarea>
-        <label for="responsibil">responsibil</label>
-        <textarea name="responsibil" id="responsibil">{{ resume.responsibil }}</textarea>
+        <label for="WEtitle{{we.id}}">title</label>
+        <input name="WEtitle{{we.id}}" id="title" value="{{ we.title }}">
+        <label for="WEcompany{{we.id}}">company</label>
+        <input name="WEcompany{{we.id}}" id="company" value="{{ we.company }}">
+        <label for="WElocation{{we.id}}">location</label>
+        <input name="WElocation{{we.id}}" id="location" value="{{ we.location }}">
+        <label for="WEstart_date{{we.id}}">start_date</label>
+        <input name="WEstart_date{{we.id}}" id="start_date" value="{{ we.start_date }}">
+        <label for="WEend_date{{we.id}}">end_date</label>
+        <input name="WEend_date{{we.id}}" id="end_date" value="{{ we.end_date }}">
+        <label for="WEsummary{{we.id}}">summary</label>
+        <textarea name="WEsummary{{we.id}}" id="summary">{{ we.summary }}</textarea>
+        <label for="WEresponsibil{{we.id}}">responsibil</label>
+        <textarea name="WEresponsibil{{we.id}}" id="responsibil">{{ we.responsibil }}</textarea>
       {% endfor %}
     {% endif %}
     {% if educations %}
     <h2>Education</h2>
       {% for ed in educations %}
         <h3>{{ ed.degree }}</h3>
-        <label for="degree">degree</label>
-        <input name="degree" id="degree" value="{{ ed.degree }}">
-        <label for="institution">institution</label>
-        <input name="institution" id="institution" value="{{ ed.institution }}">
-        <label for="location">location</label>
-        <input name="location" id="location" value="{{ ed.location }}">
-        <label for="graduation_date">graduation_date</label>
-        <input name="graduation_date" id="graduation_date" value="{{ ed.graduation_date }}">
+        <label for="EDdegree{{ed.id}}">degree</label>
+        <input name="EDdegree{{ed.id}}" id="degree" value="{{ ed.degree }}">
+        <label for="EDinstitution{{ed.id}}">institution</label>
+        <input name="EDinstitution{{ed.id}}" id="institution" value="{{ ed.institution }}">
+        <label for="EDlocation{{ed.id}}">location</label>
+        <input name="EDlocation{{ed.id}}" id="location" value="{{ ed.location }}">
+        <label for="EDgraduation_date{{ed.id}}">graduation_date</label>
+        <input name="EDgraduation_date{{ed.id}}" id="graduation_date" value="{{ ed.graduation_date }}">
       {% endfor %}
     {% endif %}
     {% if certifications %}
     <h2>Certifications</h2>
       {% for cert in certifications %}
         <h3>{{ cert.title }}</h3>
-        <label for="ctitle">title</label>
-        <input name="ctitle" id="ctitle" value="{{ cert.title }}">
-        <label for="issuer">issuer</label>
-        <input name="issuer" id="issuer" value="{{ cert.issuer }}">
-        <label for="issuer">title</label>
-        <input name="issuer" id="issuer" value="{{ cert.date_obtained }}">
+        <label for="CTtitle{{cert.id}}">title</label>
+        <input name="CTtitle{{cert.id}}" id="ctitle" value="{{ cert.title }}">
+        <label for="CTissuer">issuer</label>
+        <input name="CTissuer{{cert.id}}" id="issuer" value="{{ cert.issuer }}">
+        <label for="CTdate_obtained{{cert.id}}">title</label>
+        <input name="CTdate_obtained{{cert.id}}" id="date_obtained" value="{{ cert.date_obtained }}">
       {% endfor %}
     {% endif %}
     {% if projects %}
     <h2>Projects</h2>
       {% for proj in projects %}
       <h3>{{ proj.title }}</h3>
-      <label for="ptitle">title</label>
-      <input name="ptitle" id="ptitle" value="{{ proj.title }}">
-      <label for="description">description</label>
-      <input name="description" id="description" value="{{ proj.description }}">
-      <label for="url">url</label>
-      <input name="url" id="url" value="{{ proj.url }}">
+      <label for="PJtitle{{proj.id}}">title</label>
+      <input name="PJtitle{{proj.id}}" id="ptitle" value="{{ proj.title }}">
+      <label for="PJdescription{{proj.id}}">description</label>
+      <input name="PJdescription{{proj.id}}" id="description" value="{{ proj.description }}">
+      <label for="PJurl{{proj.id}}">url</label>
+      <input name="PJurl{{proj.id}}" id="url" value="{{ proj.url }}">
       {% endfor %}
     {% endif %}
     <input type="submit" value="Save">

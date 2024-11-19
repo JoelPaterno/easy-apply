@@ -247,8 +247,6 @@ def resume_serializer(id: int) -> dict:
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
-    
-    #print(f"requested resume id: {id}")
     user = User.query.filter(User.id == session.get("user_id")).first()
     resume = get_resume(id)
     workexperiences = WorkExperience.query.filter(WorkExperience.resume_id == resume.id).all()
@@ -256,22 +254,70 @@ def update(id):
     educations = Education.query.filter(Education.resume_id == resume.id).all()
     projects = Project.query.filter(Project.resume_id == resume.id).all()
     if request.method == 'POST':
-        summary = request.form['summary']
-        link = request.form['link']
-        skills = request.form['skills']
-        error = None
+        #print(request.headers)
+        fields = [k for k in request.form]
+        values = [request.form[k] for k in request.form]
+        data = dict(zip(fields, values))
+        print(data)
 
-        if not summary:
-            error = "summary is required"
+        seenWE = []
+        seenED = []
+        seenCT = []
+        seenPJ = []
+        #parse post request
+        for key in fields:
+            sliced = key[:2]
+            codes = ["WE", "ED", "CT", "PJ"]
+            if sliced in codes:
+                id = extract_num(key)
+            if sliced == "WE" and not id in seenWE:
+                #update values of workexp with id of id
+                seenWE.append(id)
+                workexperience = WorkExperience.query.filter(WorkExperience.id == id).first()
+                workexperience.title = request.form['WEtitle'+str(id)]
+                workexperience.company = request.form['WEcompany'+str(id)]
+                workexperience.location = request.form['WElocation'+str(id)]
+                workexperience.start_date = request.form['WEstart_date'+str(id)]
+                workexperience.end_date = request.form['WEend_date'+str(id)]
+                workexperience.summary = request.form['WEsummary'+str(id)]
+                workexperience.responsibil = request.form['WEresponsibil'+str(id)]
+            elif sliced == "ED" and not id in seenED:
+                seenED.append(id)
+                education = Education.query.filter(Education.id == id).first()
+                education.degree = request.form['EDdegree'+str(id)]
+                education.institution = request.form['EDinstitution'+str(id)]
+                education.location = request.form['EDlocation'+str(id)]
+                education.graduation_date = request.form['EDgraduation_date'+str(id)]
+            elif sliced == "CT" and not id in seenCT:
+                seenCT.append(id)
+                certification = Certification.query.filter(Certification.id == id).first()
+                certification.title = request.form['CTtitle'+str(id)]
+                certification.issuer = request.form['CTissuer'+str(id)]
+                certification.date_obtained = request.form['CTdate_obtained'+str(id)]
+            elif sliced == "PJ" and not id in seenPJ:
+                seenPJ.append(id)
+                project = Project.query.filter(Project.id == id).first()
+                project.title = request.form['PJtitle'+str(id)]
+                project.description = request.form['PJdescription'+str(id)]
+                project.url = request.form['PJurl'+str(id)]
+        print(seenWE)
+        print(seenED)
+        print(seenCT)
+        print(seenPJ)
+        resume.name = request.form['name']
+        resume.email = request.form['email']
+        resume.phone = request.form['phone']
+        resume.address = request.form['address']
+        resume.link = request.form['link']
+        resume.summary = request.form['summary']
+        resume.skills = request.form['skills']
+        db_session.commit()
+        error = None
 
         if error is not None:
             flash(error)
-        else: 
-            resume.summary = summary
-            resume.link = link
-            resume.skills = skills
-            db_session.commit()
-            return redirect(url_for('profile.index'))
+            
+        return redirect(url_for('profile.index'))
     return render_template(
         'app/update.html', 
         user=user,
@@ -412,8 +458,7 @@ def update_application(id):
         for point in range(pointsCount + 1):
             print(request.form['point'+str(point)])
             points.append(request.form['point'+str(point)])
-        #print("Skills  -- " + str(list(skills)))
-        #print("cl points -- " + str(list(points)))
+        
         #parse skills
         resume_data['skills'] = skills
         cover_letter_data['intro'] = request.form['intro']
