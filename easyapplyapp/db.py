@@ -16,6 +16,16 @@ db_session = scoped_session(sessionmaker(autocommit=False,
 Base = declarative_base()
 Base.query = db_session.query_property()
 
+def init_test_db(path):
+    engine1 = create_engine(path)
+    db_session = scoped_session(sessionmaker(autocommit=False,
+                                         autoflush=False,
+                                         bind=engine1))
+    Base = declarative_base()
+    Base.query = db_session.query_property()
+    from . import models
+    Base.metadata.create_all(bind=engine1)
+    return db_session
 def init_db():
     from . import models
     Base.metadata.create_all(bind=engine)

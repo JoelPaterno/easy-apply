@@ -435,6 +435,7 @@ def start_application(id):
 @bp.route('/<int:id>/updateapp', methods=('POST', 'GET'))
 @login_required
 def update_application(id):
+    user = User.query.filter(User.id == session.get('user_id')).first()
     application = Application.query.filter(Application.id == id).first()
     cover_letter_data = json.loads(application.cover_letter_data)
     resume_data = json.loads(application.resume_data)
@@ -497,6 +498,7 @@ def update_application(id):
         resume_skills=resume_skills,
         resume_html=resume_html,
         coverletter_html=coverletter_html,
+        user=user,
         )
 
 @bp.route('/<int:id>/deleteapp', methods=('POST',))
