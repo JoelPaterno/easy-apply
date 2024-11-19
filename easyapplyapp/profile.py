@@ -166,8 +166,8 @@ def create():
 
 def get_resume(id, check_author=True):
     resume = Resume.query.filter(Resume.id == id).first()
-    print(f"Resume: id = {resume.id} user_id = {resume.user_id} summary = {resume.summary}")
-    print(f"Session user id : {session.get('user_id')}")
+    #print(f"Resume: id = {resume.id} user_id = {resume.user_id} summary = {resume.summary}")
+    #print(f"Session user id : {session.get('user_id')}")
 
     if resume is None:
         abort(404, f"resume {id} doesn't exist")
@@ -244,23 +244,17 @@ def resume_serializer(id: int) -> dict:
 
     #print(f"SERIALISED RESUME DATA DICT - {resume_dict}")
     return resume_dict
-
-#test route for resume serialiser
-@bp.route('/test', methods=('GET',))
-@login_required
-def test():
-    resume_dict = resume_serializer(1)
-    print(resume_dict)
-    return redirect(url_for('profile.index'))
-
-
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
     
-    print(f"requested resume id: {id}")
+    #print(f"requested resume id: {id}")
+    user = User.query.filter(User.id == session.get("user_id")).first()
     resume = get_resume(id)
-
+    workexperiences = WorkExperience.query.filter(WorkExperience.resume_id == resume.id).all()
+    certifications = Certification.query.filter(Certification.resume_id == resume.id).all()
+    educations = Education.query.filter(Education.resume_id == resume.id).all()
+    projects = Project.query.filter(Project.resume_id == resume.id).all()
     if request.method == 'POST':
         summary = request.form['summary']
         link = request.form['link']
@@ -278,7 +272,15 @@ def update(id):
             resume.skills = skills
             db_session.commit()
             return redirect(url_for('profile.index'))
-    return render_template('app/update.html', resume=resume)
+    return render_template(
+        'app/update.html', 
+        user=user,
+        resume=resume, 
+        workexperiences=workexperiences,
+        certifications=certifications,
+        educations=educations,
+        projects=projects,
+        )
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required

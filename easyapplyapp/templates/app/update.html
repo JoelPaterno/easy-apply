@@ -1,18 +1,57 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Edit "{{ resume.uer_id }}"{% endblock %}</h1>
+  <h1>{% block title %}Edit - {{ resume.name }}{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
   <form method="post">
-    <label for="summary">Title</label>
-    <input name="summary" id="summary"
-      value="{{ request.form['summary'] or resume.summary }}" required>
-    <label for="skills">skills</label>
-    <textarea name="skills" id="skills">{{ request.form['skills'] or resume.skills }}</textarea>
+    <label for="name">name</label>
+    <input name="name" id="name" value="{{ resume.name }}">
+    <label for="email">email</label>
+    <input name="email" id="email" value="{{ resume.email }}">
+    <label for="phone">phone</label>
+    <input name="phone" id="phone" value="{{ resume.phone }}">
+    <label for="address">address</label>
+    <input name="address" id="address" value="{{ resume.address }}">
     <label for="link">link</label>
-    <textarea name="link" id="link">{{ request.form['link'] or resume.link }}</textarea>
+    <input name="link" id="link" value="{{ resume.link }}">
+    <label for="summary">summary</label>
+    <textarea name="summary" id="summary">{{ resume.summary }}</textarea>
+    <label for="skills">skills</label>
+    <textarea name="skills" id="skills">{{ resume.skills }}</textarea>
+    {% if workexperiences %}
+    <h2>Work Experince</h2>
+      {% for we in workexperiences %}
+        <h3>{{ we.title }}</h3>
+        <label for="title">title</label>
+        <input name="title" id="title" value="{{ we.title }}">
+      {% endfor %}
+    {% endif %}
+    {% if educations %}
+    <h2>Education</h2>
+      {% for ed in educations %}
+        <h3>{{ ed.degree }}</h3>
+        <label for="degree">degree</label>
+        <input name="degree" id="degree" value="{{ ed.degree }}">
+      {% endfor %}
+    {% endif %}
+    {% if certifications %}
+    <h2>Certifications</h2>
+      {% for cert in certifications %}
+        <h3>{{ cert.title }}</h3>
+        <label for="ctitle">title</label>
+        <input name="ctitle" id="ctitle" value="{{ cert.title }}">
+      {% endfor %}
+    {% endif %}
+    {% if projects %}
+    <h2>Projects</h2>
+      {% for proj in projects %}
+      <h3>{{ proj.title }}</h3>
+      <label for="ptitle">title</label>
+      <input name="ptitle" id="ptitle" value="{{ proj.title }}">
+      {% endfor %}
+    {% endif %}
     <input type="submit" value="Save">
   </form>
   <hr>

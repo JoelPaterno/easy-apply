@@ -16,7 +16,7 @@
     <hr>
     <h3>Applications</h3>
     {% for application in applications %}
-        <button type="button" class="collapsible">{{ application.role }}</button>
+        <button type="button" class="collapsible">{{application.company}} - {{ application.role }}</button>
         <div class="col-content">
             <h3>{{ application.role }} </h3>
             <p>{{ application.company }}</p>

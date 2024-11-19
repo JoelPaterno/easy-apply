@@ -1,4 +1,5 @@
 const dynmaicFormDiv = document.getElementById('createForm');
+var save = document.getElementById('save');
 var workExperienceBtn = document.getElementById('addWE');
 var educationBtn = document.getElementById('addEd');
 var certificationBtn = document.getElementById('addCert');
@@ -48,6 +49,7 @@ function addWorkExperience() {
     let header = document.createElement("h2");
     header.innerHTML= "Work Experience";
 
+    save.remove()
     dynmaicFormDiv.appendChild(header);
     dynmaicFormDiv.appendChild(title);
     dynmaicFormDiv.appendChild(company);
@@ -56,6 +58,8 @@ function addWorkExperience() {
     dynmaicFormDiv.appendChild(weEndDate);
     dynmaicFormDiv.appendChild(weSummary);
     dynmaicFormDiv.appendChild(weResponsibilities);
+    dynmaicFormDiv.appendChild(save);
+
     console.log("addWorkExperince function appended form into dynamic form div");
 }
 
@@ -85,11 +89,13 @@ function addEducation() {
     edDate.setAttribute("name", "ED" + edCount + "date");
     edDate.setAttribute("placeholder", "date");
     
+    save.remove()
     dynmaicFormDiv.appendChild(edHeading);
     dynmaicFormDiv.appendChild(edDegree);
     dynmaicFormDiv.appendChild(institution);
     dynmaicFormDiv.appendChild(edLocation);
     dynmaicFormDiv.appendChild(edDate);
+    dynmaicFormDiv.appendChild(save);
 
     console.log("addEducation function appended form into dynamic form div");
 }
@@ -117,11 +123,12 @@ function addCertification() {
     certDate.setAttribute("name", "CT" + certCount + "date");
     certDate.setAttribute("placeholder", "Date");
 
-
+    save.remove()
     dynmaicFormDiv.appendChild(certHeading);
     dynmaicFormDiv.appendChild(certTitle);
     dynmaicFormDiv.appendChild(certIssuer);
     dynmaicFormDiv.appendChild(certDate);
+    dynmaicFormDiv.appendChild(save);
 
     console.log("addCertification function appended form into dynamic form div");
 }
@@ -152,11 +159,13 @@ function addProjects() {
     projDate.setAttribute("name","PJ" + projCount + "date");
     projDate.setAttribute("placeholder", "Date");
 
+    save.remove()
     dynmaicFormDiv.appendChild(heading);
     dynmaicFormDiv.appendChild(projTitle);
     dynmaicFormDiv.appendChild(projDescription);
     dynmaicFormDiv.appendChild(projURL);
     dynmaicFormDiv.appendChild(projDate);
+    dynmaicFormDiv.appendChild(save);
 
     console.log("addProjects function appended form into dynamic form div");
 }
