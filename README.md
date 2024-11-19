@@ -13,3 +13,5 @@ https://www.youtube.com/watch?v=I_fTQTsz2nQ
 Testing with sqlalchemy db
 https://stackoverflow.com/questions/17791571/how-can-i-test-a-flask-application-which-uses-sqlalchemy 
 https://pythonhosted.org/Flask-Testing/
+Async
+https://www.youtube.com/watch?v=0z74b3c63GA

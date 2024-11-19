@@ -26,6 +26,18 @@
         <h3>{{ we.title }}</h3>
         <label for="title">title</label>
         <input name="title" id="title" value="{{ we.title }}">
+        <label for="company">company</label>
+        <input name="company" id="company" value="{{ we.company }}">
+        <label for="location">location</label>
+        <input name="location" id="location" value="{{ we.location }}">
+        <label for="start_date">start_date</label>
+        <input name="start_date" id="start_date" value="{{ we.start_date }}">
+        <label for="end_date">end_date</label>
+        <input name="end_date" id="end_date" value="{{ we.end_date }}">
+        <label for="summary">summary</label>
+        <textarea name="summary" id="summary">{{ resume.summary }}</textarea>
+        <label for="responsibil">responsibil</label>
+        <textarea name="responsibil" id="responsibil">{{ resume.responsibil }}</textarea>
       {% endfor %}
     {% endif %}
     {% if educations %}
@@ -34,6 +46,12 @@
         <h3>{{ ed.degree }}</h3>
         <label for="degree">degree</label>
         <input name="degree" id="degree" value="{{ ed.degree }}">
+        <label for="institution">institution</label>
+        <input name="institution" id="institution" value="{{ ed.institution }}">
+        <label for="location">location</label>
+        <input name="location" id="location" value="{{ ed.location }}">
+        <label for="graduation_date">graduation_date</label>
+        <input name="graduation_date" id="graduation_date" value="{{ ed.graduation_date }}">
       {% endfor %}
     {% endif %}
     {% if certifications %}
@@ -42,6 +60,10 @@
         <h3>{{ cert.title }}</h3>
         <label for="ctitle">title</label>
         <input name="ctitle" id="ctitle" value="{{ cert.title }}">
+        <label for="issuer">issuer</label>
+        <input name="issuer" id="issuer" value="{{ cert.issuer }}">
+        <label for="issuer">title</label>
+        <input name="issuer" id="issuer" value="{{ cert.date_obtained }}">
       {% endfor %}
     {% endif %}
     {% if projects %}
@@ -50,6 +72,10 @@
       <h3>{{ proj.title }}</h3>
       <label for="ptitle">title</label>
       <input name="ptitle" id="ptitle" value="{{ proj.title }}">
+      <label for="description">description</label>
+      <input name="description" id="description" value="{{ proj.description }}">
+      <label for="url">url</label>
+      <input name="url" id="url" value="{{ proj.url }}">
       {% endfor %}
     {% endif %}
     <input type="submit" value="Save">
