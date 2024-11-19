@@ -7,6 +7,7 @@ from easyapplyapp.services import llm_handler
 from easyapplyapp.services.pdf_generator import generate_cover_letter, generate_resume
 import json
 import os
+from timeit import default_timer as timer
 
 bp = Blueprint('profile', __name__)
 
@@ -345,6 +346,7 @@ def apply():
     #currently no selection of resume at job application stage
     resume = Resume.query.filter(Resume.user_id == cur_user_id).first()
     if request.method == 'POST':
+        start = timer()
         link = request.form['link']
         description = request.form['paste']
 
@@ -369,12 +371,17 @@ def apply():
                 db_session.commit()
             except Exception as error:
                 flash("An Error Occured:", error)
-        return redirect(url_for('profile.apply'))  
+        app_id = application.id
+        end = timer()
+        time = end - start
+        print(time)
+        return redirect(url_for('profile.start_application', id=app_id))  
     return render_template('app/apply.html', user=user, applications=applications, resume=resume)
 
 @bp.route('/<int:id>/start', methods=('POST', 'GET'))
 @login_required
 def start_application(id):
+    start = timer()
     #get application
     application = Application.query.filter(Application.id == id).first()
     resume = Resume.query.filter(Resume.user_id == session.get("user_id")).first()
@@ -383,7 +390,7 @@ def start_application(id):
     if application.resume_data is None:
         #TODO: Modify this to call resume_serialiser() with the first resume. a resume data dict will be returned which can then be used the same as the loaded json file.
         resume_data = resume_serializer(resume.id)
-        print("RESUME DATA LOADED IN FOR LLM BY SERIALISER - " + json.dumps(resume_data))
+        #print("RESUME DATA LOADED IN FOR LLM BY SERIALISER - " + json.dumps(resume_data))
     else: 
         resume_data = json.loads(application.resume_data)
     #call llm handler generate_resume_skills -> list of skills
@@ -405,7 +412,6 @@ def start_application(id):
         cover_letter['website'] = resume_data['website_link']
         cover_letter['saultation'] = "Dear Hiring Manager"
         cover_letter['signature'] = "Sincerely,"
-        print(cover_letter)
         application.cover_letter_data = json.dumps(cover_letter)
     else:
         cover_letter = json.loads(application.cover_letter_data)
@@ -421,6 +427,9 @@ def start_application(id):
     #commit changed application to the db
     db_session.commit()
     #redirect to applications
+    end = timer()
+    time = end - start
+    print(time)
     return redirect(url_for('profile.apply'))
 
 @bp.route('/<int:id>/updateapp', methods=('POST', 'GET'))
@@ -498,7 +507,6 @@ def delete_app(id):
     db_session.commit()
     return redirect(url_for('profile.apply'))
 
-
 @bp.route('/<int:id>/regenrate', methods=('GET',))
 @login_required
 def regenerate(id):
@@ -555,5 +563,3 @@ def coverletter_dl(id):
     coverletter_filename = application.cover_letter_file_path[-25:]
     #print(coverletter_filename)
     return send_from_directory(coverletter_folder, coverletter_filename, as_attachment=True)
-
-

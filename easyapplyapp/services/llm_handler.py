@@ -30,7 +30,7 @@ def create_job_application(description: str) -> dict:
         chain = prompt_template | model | parser
 
         response = chain.invoke({"job_description": description})
-        print("CREATE JOB APPLICATION RESPONSE -- " + str(response))
+        #print("CREATE JOB APPLICATION RESPONSE -- " + str(response))
         return response
     except Exception as e:
         print(e)
@@ -56,7 +56,7 @@ def generate_cover_letter(job_description: str, resume: str) -> str:
         chain = prompt_template | model | parser
 
         response = chain.invoke({"job_description": job_description, "resume": resume})
-        print("CREATE COVER LETTER RESPONSE -- " + str(response))
+        #print("CREATE COVER LETTER RESPONSE -- " + str(response))
         return response
     except Exception as e:
         print(e)
@@ -76,7 +76,7 @@ def generate_resume_skills(job_description, resume) -> list:
         chain = prompt_template | model | parser
 
         response = chain.invoke({"job_description": job_description, "resume": resume})
-        print("CREATE RESUME RESPONSE -- " + str(response))
+        #print("CREATE RESUME RESPONSE -- " + str(response))
         return response
     except Exception as e:
         print(e)

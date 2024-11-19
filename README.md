@@ -15,3 +15,5 @@ https://stackoverflow.com/questions/17791571/how-can-i-test-a-flask-application-
 https://pythonhosted.org/Flask-Testing/
 Async
 https://www.youtube.com/watch?v=0z74b3c63GA
+SSL Certs
+https://www.youtube.com/watch?v=J9jKKeV1XVE 
