@@ -1,33 +1,25 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Profile{% endblock %}</h1>
-{% endblock %}
+{% block header %}{% endblock %}
 
 {% block content %}
-  <h2>Your Resumes</h2>
-  {% if user %}
-    <a class="action" href="{{ url_for('profile.create') }}">New Resume</a>
-  {% endif %}
+  <div class="newResume">
+    {% if user %}
+      <a class="action" href="{{ url_for('profile.create') }}">Create New Resume</a>
+      <h2>Your Resumes</h2>
+    {% endif %}
+  </div>
   </form>
   {% for resume in resumes %}
     <article class="post">
-      <header>
-        <div>
-          <h1>{{ resume.summary }}</h1>
-          <div class="about">skills {{ resume.skills }} link {{ resume.link }}</div>
-          {% for work in workexperiences_result %}
-            {% if work.resume_id == resume.id %}
-              <p class="body">{{ work.title }}</p>
-              <p class="body">{{ work.company }}</p>
-              <p class="body">{{ work.location }}</p>
-            {% endif %}
-          {% endfor %}
-        </div>
-        {% if user.id == resume.user_id %}
-          <a class="action" href="{{ url_for('profile.update', id=resume.id) }}">Edit</a>
-        {% endif %}
-      </header>
+      <div class="resumeDisplay">
+        <h1>{{ resume.summary }}</h1>
+        <div class="about">Skills - {{ resume.skills }} link {{ resume.link }}</div>
+        <br>
+      {% if user.id == resume.user_id %}
+        <a class="action" href="{{ url_for('profile.update', id=resume.id) }}">Edit</a>
+      {% endif %}
+      </div>
     </article>
     {% if not loop.last %}
       <hr>

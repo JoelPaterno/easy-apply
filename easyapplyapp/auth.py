@@ -25,13 +25,14 @@ def register():
                     user = User(name=username, password=generate_password_hash(password))
                     db_session.add(user)
                     db_session.commit()
-                    error = "Please login via the login page"
+                    error = "Account Created! Please login"
                 except:
                     error = f"Unable to add user {username} to database"
             else:
                 error = f"user {username} is already registered"
 
         flash(error)
+        return render_template('auth/login.html')
     return render_template('auth/register.html')
 
 @bp.route('/login', methods=('GET', 'POST'))

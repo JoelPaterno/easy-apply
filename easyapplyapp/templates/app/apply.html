@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Applications{% endblock %}</h1>
+<h1>Start Applying for Jobs Now!</h1>
 {% endblock %}
 
 {% block content %}
@@ -10,30 +10,32 @@
         <input type="url" name="link" id="link">
         <label for="paste">Paste a Job Description</label>
         <textarea name="paste" id="paste"></textarea>
-        <input type="submit" value="Apply for Job">
+        <input type="submit" value="Prepare Application">
     </form>
-    
+    <div class="progress-bar" data-label="Writing Your Application - Please Wait..."></div>
     <hr>
-    <h3>Applications</h3>
+    <h3>My Applications</h3>
     {% for application in applications %}
         <button type="button" class="collapsible">{{application.company}} - {{ application.role }}</button>
         <div class="col-content">
-            <h3>{{ application.role }} </h3>
-            <p>{{ application.company }}</p>
-            <p>{{ application.location }}</p>
+            <div class="col-jobdeets">
+                <h3>{{ application.role }} </h3>
+                <p>Company - {{ application.company }}</p>
+                <p>Location - {{ application.location }}</p>
+                <p>Link - <a href="{{ application.link }}" target="_blank">Open Job In New Tab</a></p>
+                <br>
+                <h3>Description</h3>
+                <p>{{ application.description }}</p>
+            </div>
             <br>
-            <h3>Description</h3>
-            <p>{{ application.description }}</p>
             <br>
-            <br>
-            {% if application.resume_file_path is none %}
-                <a class="action" href="{{ url_for('profile.start_application', id=application.id) }}">Prepare Application</a>
-            {% else %}
-                <a class="action" href="{{ url_for('profile.update_application', id=application.id) }}">View and Edit</a>
-                <a class="action" href="{{ url_for('profile.resume_dl', id=application.id) }}">Download Resume</a>
-                <a class="action" href="{{ url_for('profile.coverletter_dl', id=application.id) }}" download>Download Cover Letter</a>
-                <a class="action" href="{{ url_for('profile.regenerate', id=application.id) }}">Regenarate Docs</a>
-            {% endif  %}
+            <div class="col-button">
+                {% if application.resume_file_path is none %}
+                    <a class="action" href="{{ url_for('profile.start_application', id=application.id) }}">Prepare Application</a>
+                {% else %}
+                    <a class="action" href="{{ url_for('profile.update_application', id=application.id) }}">View and Edit</a>
+                {% endif  %}
+            </div>
         </div>
     {% endfor %}
     <script src="{{ url_for('static', filename='apply.js') }}"></script>
