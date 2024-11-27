@@ -36,16 +36,12 @@ def clear_files():
             resume_path = os.path.join(resumes_path, resume)
             if os.path.isfile(resume_path):
                 os.remove(resume_path)
-            elif os.path.isdir(resume_path):
-                shutil.rmtree(resume_path)
 
         coverletters = os.listdir(cover_letters_path)
         for coverletter in coverletters:
             coverletter_path = os.path.join(cover_letters_path, coverletter)
             if os.path.isfile(coverletter_path):
                 os.remove(coverletter_path)
-            elif os.path.isdir(coverletter_path):
-                shutil.rmtree(coverletter_path)
     except Exception as e:
         print(e)
 
@@ -374,7 +370,7 @@ def apply():
     resumes = Resume.query.filter(Resume.user_id == cur_user_id).all()
     if request.method == 'POST':
         for resume in resumes:
-            if resume.role_for == request.form['resume']:
+            if resume.for_role == request.form['resume']:
                 selected_resume = resume
         start = timer()
         link = request.form['link']
