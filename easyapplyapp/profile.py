@@ -374,7 +374,7 @@ def apply():
     resumes = Resume.query.filter(Resume.user_id == cur_user_id).all()
     if request.method == 'POST':
         for resume in resumes:
-            if resume.id == int(request.form['resume']):
+            if resume.role_for == request.form['resume']:
                 selected_resume = resume
         start = timer()
         link = request.form['link']
