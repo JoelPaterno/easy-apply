@@ -13,7 +13,7 @@
         <label for="resume">Choose a Resume:</label>
         <select name="resume" id="resume" form="applyform">
             {% for resume in resumes%}
-                <option value="{{ resume.id }}">{{resume.id }}</option>
+                <option value="{{ resume.for_role }}">{{resume.for_role }}</option>
             {% endfor %}
         </select>
         <input type="submit" value="Prepare Application">
