@@ -31,7 +31,7 @@ def create_job_application(description: str) -> dict:
         chain = prompt_template | model | parser
 
         response = chain.invoke({"job_description": description})
-        print("CREATE JOB APPLICATION RESPONSE -- " + str(response))
+        #print("CREATE JOB APPLICATION RESPONSE -- " + str(response))
         return response
     except Exception as e:
         print(e)

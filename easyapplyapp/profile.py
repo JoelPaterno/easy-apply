@@ -8,6 +8,7 @@ from easyapplyapp.services.pdf_generator import generate_cover_letter, generate_
 import json
 import os
 from timeit import default_timer as timer
+from .services.pdf_generator import generate_filename
 
 bp = Blueprint('profile', __name__)
 
@@ -361,7 +362,7 @@ def apply():
         role = application_data['role']
         location = application_data['location']
         company = application_data['company']
-        description = application_data['summary']
+        summary = application_data['summary']
         error = None
 
         if not description:
@@ -371,7 +372,7 @@ def apply():
             flash(error)
         else:
             try:
-                application = Application(role=role, link=link, description=description, location=location, company=company, user_id=cur_user_id, resume_id=selected_resume.id)
+                application = Application(role=role, link=link, description=description, location=location, company=company, user_id=cur_user_id, resume_id=selected_resume.id, summary=summary)
                 db_session.add(application)
                 db_session.commit()
             except Exception as error:
@@ -404,6 +405,7 @@ def start_application(id):
     if application.resume_data is None:
         resume_skills = llm_handler.generate_resume_skills(job_description=application.description, resume=resume_str)
         resume_data['skills'] = resume_skills
+        resume_data['doctitle'] = f"{application.company} {application.role} Resume"
         resume_data_str = json.dumps(resume_data)
         application.resume_data = resume_data_str
     
@@ -411,6 +413,7 @@ def start_application(id):
     if application.cover_letter_data is None:
         cover_letter = llm_handler.generate_cover_letter(job_description=application.description, resume=resume_data_str)
         #get these details from the selected resume. 
+        cover_letter['doctitle'] = f"{application.company} {application.role} Cover Letter"
         cover_letter['name'] = resume_data['name']
         cover_letter['email'] = resume_data['email']
         cover_letter['phone'] = resume_data['phone']
@@ -469,10 +472,10 @@ def update_application(id):
         points = []
         #TODO: loop through skills and points and populate
         for skill in range(skillCount):
-            print(request.form['skill'+str(skill)])
+            #print(request.form['skill'+str(skill)])
             skills.append(request.form['skill'+str(skill)])
         for point in range(pointsCount + 1):
-            print(request.form['point'+str(point)])
+            #print(request.form['point'+str(point)])
             points.append(request.form['point'+str(point)])
         
         #parse skills
@@ -491,11 +494,13 @@ def update_application(id):
         regenerate(id=application.id)
         return redirect(url_for('profile.update_application' , id=id))
 
-    with open(application.resume_file_path, "r") as resume:
-        resume_html = resume.read()
     
-    with open(application.cover_letter_file_path) as cl:
-        coverletter_html = cl.read()
+    resume_html = application.resume_file_path
+    #print(resume_html)
+
+    coverletter_html = application.cover_letter_file_path
+    #print(coverletter_html)
+
 
     return render_template(
         'app/update_application.html', 
@@ -556,18 +561,34 @@ def regenerate(id):
 @login_required
 def resume_dl(id):
     application = Application.query.filter(Application.id == id).first()
+    output_text = application.resume_file_path
+    filename = generate_filename()
     cwd = os.getcwd()
-    resume_folder = os.path.join(cwd, 'easyapplyapp', 'files', 'resumes')
-    resume_filename = application.resume_file_path[-25:]
+    output_path = os.path.join(cwd, 'easyapplyapp', 'files', 'resumes')
+    try:
+        os.chdir(output_path)
+        with open(f'{filename}.html', 'w') as f:
+                f.write(output_text)
+        os.chdir(cwd)
+    except Exception as e:
+         print(e)
     #print(resume_filename)
-    return send_from_directory(resume_folder, resume_filename, as_attachment=True)
+    return send_from_directory(output_path, f"{filename}.html", as_attachment=True)
 
 @bp.route('/<int:id>/coverletterdl', methods=('GET',))
 @login_required
 def coverletter_dl(id):
     application = Application.query.filter(Application.id == id).first()
+    output_text = application.cover_letter_file_path
     cwd = os.getcwd()
-    coverletter_folder = os.path.join(cwd, 'easyapplyapp', 'files', 'coverletters')
-    coverletter_filename = application.cover_letter_file_path[-25:]
-    #print(coverletter_filename)
-    return send_from_directory(coverletter_folder, coverletter_filename, as_attachment=True)
+    filename = generate_filename()
+    cwd = os.getcwd()
+    output_path = os.path.join(cwd, 'easyapplyapp', 'files', 'coverletters')
+    try:
+        os.chdir(output_path)
+        with open(f'{filename}.html', 'w') as f:
+                f.write(output_text)
+        os.chdir(cwd)
+    except Exception as e:
+         print(e)
+    return send_from_directory(output_path, f"{filename}.html", as_attachment=True)

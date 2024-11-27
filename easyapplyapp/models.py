@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, Boolean, DateTime
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 from .db import Base
 
 class User(Base):
@@ -7,6 +8,8 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
     password = Column(String(200), nullable=False)
+    active = Column(Boolean, unique=False, default=True)
+    time_created = Column(DateTime(timezone=True), server_default=func.now())
 
     def __init__(self, name=None, password=None):
         self.name = name
@@ -82,6 +85,7 @@ class Certification(Base):
 class Resume(Base):
     __tablename__ = 'resumes'
     id = Column(Integer, primary_key=True)
+    for_role = Column(String(100))
     name = Column(String(500))
     email = Column(String(500))
     phone = Column(String(500))
@@ -90,6 +94,7 @@ class Resume(Base):
     link = Column(String(100))
     skills = Column(String(500))
     user_id = Column(Integer, ForeignKey('users.id'))
+    time_created = Column(DateTime(timezone=True), server_default=func.now())
     workexperiences = relationship(WorkExperience, cascade="all, delete", backref="resume")
     educations = relationship(Education, cascade="all, delete", backref="resume")
     certifications = relationship(Certification, cascade="all, delete", backref="resume")
@@ -113,15 +118,17 @@ class Application(Base):
     company = Column(String(500))
     location = Column(String(500))
     description = Column(Text)
+    summary = Column(String(500))
     link = Column(String(500)) 
     cover_letter_file_path = Column(String(500)) 
     cover_letter_data = Column(Text) 
     resume_file_path = Column(String(500)) 
     resume_data = Column(Text) 
+    time_created = Column(DateTime(timezone=True), server_default=func.now())
     user_id = Column(Integer, ForeignKey('users.id'))
     resume_id = Column(Integer, ForeignKey('resumes.id'))
 
-    def __init__(self, role=None, link=None, location=None, company=None, description=None, user_id=None, resume_id=None):
+    def __init__(self, role=None, link=None, location=None, company=None, description=None, user_id=None, resume_id=None, summary=None):
         self.role = role
         self.link = link
         self.description = description
@@ -129,5 +136,6 @@ class Application(Base):
         self.company = company
         self.user_id = user_id
         self.resume_id = resume_id
+        self.summary = summary
     def __repr__(self):
         return f"<Application(user_id = {self.user_id}, resume_id = {self.resume_id}, role = {self.role}), description = {self.description}>"

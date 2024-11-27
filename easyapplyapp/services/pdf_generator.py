@@ -18,16 +18,18 @@ def generate_cover_letter(cover_letter_dict: dict, appfilepath=None) -> str:
     """
     Modify to take an application object created on form submit and will populate the cover_letter_data and cover_letter_path attributes of the object
     args - dict of cl data
-    return - path to generated file
+    return - rendered html text
     """
-    filename = generate_filename()
 
     #TODO: Generate resume.html file
     template_loader = jinja2.FileSystemLoader(os.path.join(appfilepath, 'easyapplyapp', 'services', 'templates'))
     template_env = jinja2.Environment(loader=template_loader)
     template = template_env.get_template('cover_letter_template_1.html')
     output_text = template.render(cover_letter_dict)
-    output_path = os.path.join(appfilepath, 'easyapplyapp', 'files', 'coverletters')
+    return output_text
+    # output_path = os.path.join(appfilepath, 'easyapplyapp', 'files', 'coverletters')
+
+    """
     try:
         os.chdir(output_path)
         with open(f'{filename}.html', 'w') as f:
@@ -37,6 +39,7 @@ def generate_cover_letter(cover_letter_dict: dict, appfilepath=None) -> str:
         return os.path.join(output_path, f'{filename}.html')
     except Exception as e:
          print(e)
+    """
 
 
 
@@ -46,13 +49,15 @@ def generate_resume(resume_data: dict, appfilepath=None) -> str:
     args - string of the resume data
     return - path to generated file
     """
-    filename = generate_filename()
 
     #TODO: Generate resume.html file
     template_loader = jinja2.FileSystemLoader(os.path.join(appfilepath, 'easyapplyapp', 'services', 'templates'))
     template_env = jinja2.Environment(loader=template_loader)
     template = template_env.get_template('resume_template_1.html')
     output_text = template.render(resume_data)
+    return output_text
+
+    """
     output_path = os.path.join(appfilepath, 'easyapplyapp', 'files', 'resumes')
     try:
         os.chdir(output_path)
@@ -63,4 +68,4 @@ def generate_resume(resume_data: dict, appfilepath=None) -> str:
         return os.path.join(output_path, f'{filename}.html')
     except Exception as e:
         print(e)
-    
+    """
