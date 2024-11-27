@@ -7,6 +7,7 @@ from easyapplyapp.services import llm_handler
 from easyapplyapp.services.pdf_generator import generate_cover_letter, generate_resume
 import json
 import os
+import shutil
 from timeit import default_timer as timer
 from .services.pdf_generator import generate_filename
 
@@ -24,6 +25,29 @@ def index():
         for workexperience in workexperiences:
             workexperiences_result.append(workexperience)
     return render_template('app/index.html', user=user, resumes=resumes, workexperiences_result=workexperiences_result)
+
+def clear_files():
+    cwd = os.getcwd()
+    resumes_path = os.path.join(cwd, 'easyapplyapp', 'files', 'resumes')
+    cover_letters_path = os.path.join(cwd, 'easyapplyapp', 'files', 'coverletters')
+    try:
+        resumes = os.listdir(resumes_path)
+        for resume in resumes:
+            resume_path = os.path.join(resumes_path, resume)
+            if os.path.isfile(resume_path):
+                os.remove(resume_path)
+            elif os.path.isdir(resume_path):
+                shutil.rmtree(resume_path)
+
+        coverletters = os.listdir(cover_letters_path)
+        for coverletter in coverletters:
+            coverletter_path = os.path.join(cover_letters_path, coverletter)
+            if os.path.isfile(coverletter_path):
+                os.remove(coverletter_path)
+            elif os.path.isdir(coverletter_path):
+                shutil.rmtree(coverletter_path)
+    except Exception as e:
+        print(e)
 
 def extract_num(key : str) -> int: 
     count_str = ""
@@ -307,6 +331,7 @@ def update(id):
         print(seenCT)
         print(seenPJ)
         resume.name = request.form['name']
+        resume.for_role = request.form['role']
         resume.email = request.form['email']
         resume.phone = request.form['phone']
         resume.address = request.form['address']
@@ -341,6 +366,7 @@ def deleted(id):
 @bp.route('/apply', methods=('GET', 'POST'))
 @login_required
 def apply():
+    clear_files()
     cur_user_id = session.get("user_id")
     user = User.query.filter(User.id == cur_user_id).first()
     applications = Application.query.filter(Application.user_id == cur_user_id)

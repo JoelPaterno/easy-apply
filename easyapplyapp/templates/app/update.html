@@ -6,6 +6,8 @@
 
 {% block content %}
   <form method="post">
+    <label for="role">For Role</label>
+    <input name="role" id="role" value="{{ resume.for_role }}">
     <label for="name">name</label>
     <input name="name" id="name" value="{{ resume.name }}">
     <label for="email">email</label>

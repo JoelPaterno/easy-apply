@@ -1,21 +1,24 @@
 {% extends 'base.html' %}
 
-{% block header %}{% endblock %}
+{% block header %}
+<div class="index-header">
+  <h2>Create and Edit Your Resumes!</h2>
+</div>
+{% endblock %}
 
 {% block content %}
   <div class="newResume">
     {% if user %}
-      <a class="action" href="{{ url_for('profile.create') }}">Create New Resume</a>
-      <h2>Your Resumes</h2>
+      <a class="action new-resume" href="{{ url_for('profile.create') }}">Create New Resume</a>
     {% endif %}
   </div>
+  <hr>
   </form>
   {% for resume in resumes %}
     <article class="post">
       <div class="resumeDisplay">
-        <h1>{{ resume.summary }}</h1>
-        <div class="about">Skills - {{ resume.skills }} link {{ resume.link }}</div>
-        <br>
+        <h1>{{ resume.for_role }}</h1>
+        <div class="about">Summary - {{ resume.summary }}</div>
       {% if user.id == resume.user_id %}
         <a class="action" href="{{ url_for('profile.update', id=resume.id) }}">Edit</a>
       {% endif %}
