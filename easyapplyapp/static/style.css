@@ -37,6 +37,7 @@ h1 {
 
 h3 {
     color: #000; 
+    margin: 0 2rem;
 }
 
 p {
@@ -55,7 +56,7 @@ label {
     margin: 0.5rem 0; 
 }
 
-input, textarea {
+input, textarea, select {
     font-family: 'Poppins', sans-serif;
     border-radius: 10px;
     border-color: #444;
@@ -263,6 +264,7 @@ button:hover {
 }
 
 .resumeDisplay {
+    margin: 1rem 0 3rem 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -283,4 +285,18 @@ button:hover {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.create-resume-btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.index-header {
+    text-align: center;
+}
+
+.newResume {
+    margin-bottom: 2rem;
 }

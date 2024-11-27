@@ -18,6 +18,7 @@ def create_job_application(description: str) -> dict:
         role: str
         company: str
         location: str
+        summary: str
     
     application_template = strings.description_application
     try:

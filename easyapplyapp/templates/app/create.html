@@ -6,6 +6,8 @@
 
 {% block content %}
   <form method="post" id="createForm">
+    <label for="role">Role</label>
+    <input name="role" id="role" placeholder="what role is this resume for">
     <label for="name">Name</label>
     <input name="name" id="name" placeholder="name">
     <label for="email">email</label>
@@ -22,9 +24,11 @@
     <textarea name="skills" id="skills">{{ request.form['skills'] }}</textarea>
     <input type="submit" id="save" value="Save">
   </form>
-  <button class="add" id="addWE">Add Work Experience</button>
-  <button class="add" id="addEd">Add Education</button>
-  <button class="add" id="addCert">Add Certification</button>
-  <button class="add" id="addProj">Add Projects</button>
+  <div class="create-resume-btns">
+    <button class="add" id="addWE">Add Work Experience</button>
+    <button class="add" id="addEd">Add Education</button>
+    <button class="add" id="addCert">Add Certification</button>
+    <button class="add" id="addProj">Add Projects</button>
+  </div>
   <script src="{{ url_for('static', filename='create.js') }}"></script>
 {% endblock %}
