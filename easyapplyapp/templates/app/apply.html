@@ -5,14 +5,22 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post">
+    <form id="applyform" method="post">
         <label for="link">Job Link</label> 
         <input type="url" name="link" id="link">
         <label for="paste">Paste a Job Description</label>
         <textarea name="paste" id="paste"></textarea>
+        <label for="resume">Choose a Resume:</label>
+        <select name="resume" id="resume" form="applyform">
+            {% for resume in resumes%}
+                <option value="{{ resume.id }}">{{resume.id }}</option>
+            {% endfor %}
+        </select>
         <input type="submit" value="Prepare Application">
     </form>
-    <div class="progress-bar" data-label="Writing Your Application - Please Wait..."></div>
+    
+    
+
     <hr>
     <h3>My Applications</h3>
     {% for application in applications %}

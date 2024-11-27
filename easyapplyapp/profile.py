@@ -344,11 +344,15 @@ def apply():
     user = User.query.filter(User.id == cur_user_id).first()
     applications = Application.query.filter(Application.user_id == cur_user_id)
     #currently no selection of resume at job application stage
-    resume = Resume.query.filter(Resume.user_id == cur_user_id).first()
+    resumes = Resume.query.filter(Resume.user_id == cur_user_id).all()
     if request.method == 'POST':
+        for resume in resumes:
+            if resume.id == int(request.form['resume']):
+                selected_resume = resume
         start = timer()
         link = request.form['link']
         description = request.form['paste']
+    
 
         try:
             application_data = llm_handler.create_job_application(description)
@@ -357,6 +361,7 @@ def apply():
         role = application_data['role']
         location = application_data['location']
         company = application_data['company']
+        description = application_data['summary']
         error = None
 
         if not description:
@@ -366,17 +371,18 @@ def apply():
             flash(error)
         else:
             try:
-                application = Application(role=role, link=link, description=description, location=location, company=company, user_id=cur_user_id, resume_id=resume.id)
+                application = Application(role=role, link=link, description=description, location=location, company=company, user_id=cur_user_id, resume_id=selected_resume.id)
                 db_session.add(application)
                 db_session.commit()
             except Exception as error:
+                print(error)
                 flash("An Error Occured:", error)
         app_id = application.id
         end = timer()
         time = end - start
         print(time)
         return redirect(url_for('profile.start_application', id=app_id))  
-    return render_template('app/apply.html', user=user, applications=applications, resume=resume)
+    return render_template('app/apply.html', user=user, applications=applications, resumes=resumes)
 
 @bp.route('/<int:id>/start', methods=('POST', 'GET'))
 @login_required
@@ -384,7 +390,7 @@ def start_application(id):
     start = timer()
     #get application
     application = Application.query.filter(Application.id == id).first()
-    resume = Resume.query.filter(Resume.user_id == session.get("user_id")).first()
+    resume = Resume.query.filter(Resume.id == application.resume_id).first()
     cwd = os.getcwd()
 
     if application.resume_data is None:
