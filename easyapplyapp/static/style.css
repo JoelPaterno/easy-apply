@@ -300,3 +300,36 @@ button:hover {
 .newResume {
     margin-bottom: 2rem;
 }
+
+.loading-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-image: linear-gradient(to right top, #ccc, #444);
+    max-width: fit-content;
+    margin: 3rem auto;
+    border-color: #000;
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 4rem;
+    padding: 2rem;
+    font-weight: 700;
+}
+
+#loading-img {
+    margin: 2rem;
+    width: 5rem;
+    height: 5rem;
+    animation: loadingIcon 1s ease-out 0s infinite normal none;
+}
+
+@keyframes loadingIcon {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.2);
+    }
+}

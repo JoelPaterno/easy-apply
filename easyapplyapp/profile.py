@@ -9,6 +9,7 @@ import json
 import os
 import shutil
 from timeit import default_timer as timer
+import time
 from .services.pdf_generator import generate_filename
 
 bp = Blueprint('profile', __name__)
@@ -369,6 +370,8 @@ def apply():
     #currently no selection of resume at job application stage
     resumes = Resume.query.filter(Resume.user_id == cur_user_id).all()
     if request.method == 'POST':
+        #time.sleep(5)
+        #return redirect(url_for('profile.apply'))
         for resume in resumes:
             if resume.for_role == request.form['resume']:
                 selected_resume = resume
@@ -402,9 +405,9 @@ def apply():
                 flash("An Error Occured:", error)
         app_id = application.id
         end = timer()
-        time = end - start
-        print(time)
-        return redirect(url_for('profile.start_application', id=app_id))  
+        time_clock = end - start
+        print(time_clock)
+        return redirect(url_for('profile.start_application', id=app_id))    
     return render_template('app/apply.html', user=user, applications=applications, resumes=resumes)
 
 @bp.route('/<int:id>/start', methods=('POST', 'GET'))
@@ -461,7 +464,7 @@ def start_application(id):
     end = timer()
     time = end - start
     print(time)
-    return redirect(url_for('profile.apply'))
+    return redirect(url_for('profile.update_application', id=id))
 
 @bp.route('/<int:id>/updateapp', methods=('POST', 'GET'))
 @login_required
