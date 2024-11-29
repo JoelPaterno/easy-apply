@@ -7,10 +7,10 @@ from easyapplyapp.services import llm_handler
 from easyapplyapp.services.pdf_generator import generate_cover_letter, generate_resume
 import json
 import os
-import shutil
 from timeit import default_timer as timer
 import time
 from .services.pdf_generator import generate_filename
+from xhtml2pdf import pisa
 
 bp = Blueprint('profile', __name__)
 
@@ -587,18 +587,19 @@ def regenerate(id):
 def resume_dl(id):
     application = Application.query.filter(Application.id == id).first()
     output_text = application.resume_file_path
-    filename = generate_filename()
+    filename = f"{application.company} {application.role}" + " Resume"
     cwd = os.getcwd()
     output_path = os.path.join(cwd, 'easyapplyapp', 'files', 'resumes')
     try:
+        os.chdir(cwd)
         os.chdir(output_path)
-        with open(f'{filename}.html', 'w') as f:
-                f.write(output_text)
+        with open(f'{filename}.pdf', 'wb') as f:
+            pisa.CreatePDF(output_text, dest=f)
         os.chdir(cwd)
     except Exception as e:
          print(e)
     #print(resume_filename)
-    return send_from_directory(output_path, f"{filename}.html", as_attachment=True)
+    return send_from_directory(output_path, f"{filename}.pdf", as_attachment=True)
 
 @bp.route('/<int:id>/coverletterdl', methods=('GET',))
 @login_required
@@ -606,14 +607,15 @@ def coverletter_dl(id):
     application = Application.query.filter(Application.id == id).first()
     output_text = application.cover_letter_file_path
     cwd = os.getcwd()
-    filename = generate_filename()
+    filename = f"{application.company} {application.role}" + " Cover Letter"
     cwd = os.getcwd()
     output_path = os.path.join(cwd, 'easyapplyapp', 'files', 'coverletters')
     try:
+        os.chdir(cwd)
         os.chdir(output_path)
-        with open(f'{filename}.html', 'w') as f:
-                f.write(output_text)
+        with open(f'{filename}.pdf', 'wb') as f:
+            pisa.CreatePDF(output_text, dest=f)
         os.chdir(cwd)
     except Exception as e:
          print(e)
-    return send_from_directory(output_path, f"{filename}.html", as_attachment=True)
+    return send_from_directory(output_path, f"{filename}.pdf", as_attachment=True)
