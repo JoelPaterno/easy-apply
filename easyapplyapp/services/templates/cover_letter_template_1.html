@@ -1,165 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ doctitle }}</title>
-    <style>
-        /* Screen styles */
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Cover Letter - {{ name }}</title>
+    <style type="text/css">
+        @page {
+            size: a4 portrait;
+            margin: 1cm;
+        }
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
+            font-size: 20pt;
         }
-        
         .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 80%;
-            max-width: 800px;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 40px;
+            width: 100%;
         }
-        
-        header {
+        .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 20pt;
         }
-        
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 10px;
+        .header h1 {
+            margin-bottom: 5pt;
+            font-size: 16pt;
         }
-        
-        a {
-            color: #3498db;
-            text-decoration: none;
+        .contact-info {
+            font-size: 10pt;
         }
-        
-        a:hover {
-            text-decoration: underline;
-        }
-        
         .letter-content {
-            font-size: 16px;
+            margin-top: 20pt;
         }
-        
-        .date {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-        
-        .salutation {
-            margin-bottom: 20px;
-        }
-        
         .body-content {
-            margin-bottom: 30px;
-            text-align: justify;
+            margin-bottom: 20pt;
         }
-        
-        .closing {
-            margin-top: 30px;
+        .signature {
+            margin-top: 40pt;
         }
-
-        /* Print-specific styles */
-        @media print {
-            body {
-                background: none;
-                margin: 0;
-                padding: 0;
-            }
-
-            .container {
-                width: 100%;
-                max-width: none;
-                margin: 0;
-                padding: 20px;
-                box-shadow: none;
-            }
-
-            a {
-                color: #000;
-                text-decoration: none;
-            }
-
-            h1 {
-                color: #000;
-            }
-
-            /* Ensure page breaks don't occur in awkward places */
-            h1, .salutation, .closing {
-                page-break-after: avoid;
-            }
-
-            .body-content {
-                page-break-inside: avoid;
-            }
-
-            /* Remove any background colors and shadows for better printing */
-            * {
-                background: transparent !important;
-                box-shadow: none !important;
-                text-shadow: none !important;
-            }
-
-            /* Show the URL after links when printing */
-            a[href^="http"]:after {
-                content: " (" attr(href) ")";
-                font-size: 90%;
-            }
-
-            /* Hide navigation elements if any are added later */
-            nav, .navigation {
-                display: none;
-            }
+        ul {
+            padding-left: 20pt;
+            margin-bottom: 10pt;
         }
-
-        /* Mobile responsiveness */
-        @media (max-width: 768px) {
-            .container {
-                width: 95%;
-                padding: 20px;
-            }
+        a {
+            color: black;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <main>
-            <header>
-                <h1>{{ name }}</h1>
-                <p>{{ email }} | {{ phone }} | {{ address }}</p>
-                <p><a href="{{ website }}" target="_blank">{{ website }}</a></p>
-            </header>
-
-            <div class="letter-content">
-                <p class="date">{{ current_date }}</p>
-
-                <p class="salutation">{{ salutation }}</p>
-
-                <div class="body-content">
-                    <p>{{ intro }}</p>
-                    <p>{{ lead_in }}</p>
-                    <ul>
-                        {% for point in points %}
-                        <li>{{ point }}</li>
-                        {% endfor %}
-                    </ul>
-                    <p>{{ outro }}</p>
-                </div>
-
-                <p class="closing">
-                    {{ signature }}<br>
-                    {{ name }}
-                </p>
+        <div class="header">
+            <h1>{{ name }}</h1>
+            
+            <div class="contact-info">
+                {{ email }} | {{ phone }} | {{ address }}
+                <br />
+                <a href="{{ website }}">{{ website }}</a>
             </div>
-        </main>
+        </div>
+
+        <div class="letter-content" role="main">
+            <p>{{ current_date }}</p>
+
+            <p>{{ salutation }}</p>
+
+            <div class="body-content">
+                <p>{{ intro }}</p>
+
+                <p>{{ lead_in }}</p>
+
+                <ul>
+                    {% for point in points %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+
+                <p>{{ outro }}</p>
+            </div>
+
+            <div class="signature">
+                <p>{{ signature }}</p>
+                <p>{{ name }}</p>
+            </div>
+        </div>
     </div>
 </body>
 </html>

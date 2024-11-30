@@ -19,3 +19,4 @@ SSL Certs
 https://www.youtube.com/watch?v=J9jKKeV1XVE 
 Print HTML to PDF 
 https://apitemplate.io/blog/how-to-convert-html-to-pdf-using-python/
+https://xhtml2pdf.readthedocs.io/en/latest/format_html.html for page templates xhtml2pdf library.

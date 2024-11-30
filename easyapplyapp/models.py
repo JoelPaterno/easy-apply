@@ -11,9 +11,10 @@ class User(Base):
     active = Column(Boolean, unique=False, default=True)
     time_created = Column(DateTime(timezone=True), server_default=func.now())
 
-    def __init__(self, name=None, password=None):
+    def __init__(self, name=None, password=None, active=None):
         self.name = name
         self.password = password
+        self.active = active
     
     def __repr__(self):
         return f'<User({self.name!r})>'

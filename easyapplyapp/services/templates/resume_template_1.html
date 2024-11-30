@@ -1,183 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ doctitle }}</title>
-    <style>
-        /* Screen styles */
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Resume Template</title>
+    <style type="text/css">
+        @page {
+            size: a4 portrait;
+            margin: 1cm;
+            font-size: 12pt;  /* Base font size at page level */
+        }
+        html {
+            font-size: 12pt;  /* Ensure base font size */
+        }
         body {
-            font-family: Arial, sans-serif;
-            font-size: 30px;
-            line-height: 1;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.5;
+            font-size: 12pt !important;  /* Force font size */
         }
-        
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            background-color: #ffffff;
-            padding: 10px;
+        * {
+            font-size: 12pt !important;  /* Universal font size override */
         }
-        
-        header {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        
         h1 {
-            color: #2c3e50;
-            margin-bottom: 10px;
+            font-size: 16pt !important;
+            text-align: center;
+            margin-bottom: 10pt;
+            border-bottom: 1pt solid #000;
+            padding-bottom: 5pt;
         }
-        
         h2 {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 5px;
-            margin-top: 10px;
+            font-size: 14pt !important;
+            border-bottom: 1pt solid #ccc;
+            padding-bottom: 3pt;
+            margin-bottom: 8pt;
         }
-        
         h3 {
-            color: #34495e;
-            margin-bottom: 5px;
+            font-size: 12pt !important;
+            font-weight: bold;
+            margin-bottom: 3pt;
         }
-        
-        a {
-            color: #3498db;
-            text-decoration: none;
+        .contact-info {
+            text-align: center;
+            margin-bottom: 15pt;
+            font-size: 10pt !important;
         }
-        
-        a:hover {
-            text-decoration: underline;
+        .section {
+            margin-bottom: 15pt;
         }
-        
-        .summary, .education, .experience, .skills, .projects, .certifications {
-            margin-bottom: 20px;
-        }
-        
-        .education-item, .job, .project, .certification {
-            margin-bottom: 15px;
-        }
-        
         ul {
-            padding-left: 20px;
-            margin: 5px 0;
+            padding-left: 20pt;
+            margin-bottom: 8pt;
         }
-        
-        li {
-            margin-bottom: 3px;
-        }
-
-        /* Print-specific styles */
-        @media print {
-            body {
-                background: none;
-                margin: 0;
-                padding: 0;
-                color: black;
-                font-size: 50px;
-            }
-
-            .container {
-                width: 100%;
-                max-width: none;
-                margin: 0;
-                padding: 10px;
-                padding-top: 5px;
-                box-shadow: none;
-            }
-
-            h1, h2, h3 {
-                color: black;
-            }
-
-            h2 {
-                border-bottom: 1px solid black;
-            }
-
-            a {
-                color: black;
-                text-decoration: none;
-            }
-
-            /* Ensure page breaks don't occur in awkward places */
-            h1, h2, h3 {
-                page-break-after: avoid;
-            }
-
-            .education-item, .job, .certification {
-                page-break-inside: avoid;
-            }
-
-            /* Remove any background colors and shadows */
-            * {
-                background: transparent !important;
-                box-shadow: none !important;
-                text-shadow: none !important;
-            }
-
-            /* Show the URL after links when printing */
-            a[href^="http"]:after {
-                content: " (" attr(href) ")";
-                font-size: 90%;
-            }
-
-            /* Adjust margins and spacing for print */
-            .container {
-                padding: 0.25in;
-            }
-
-            /* Ensure proper spacing between sections */
-            section {
-                margin-bottom: 0.2in;
-            }
-
-            /* Remove extra spacing that might cause unwanted page breaks */
-            br {
-                display: none;
-            }
-
-            /* Optimize list spacing for print */
-            ul {
-                margin: 5px 0;
-                padding-left: 0.2in;
-            }
-
-            li {
-                margin-bottom: 2px;
-            }
-
-            /* Hide comments when printing */
-            .projects {
-                display: none;
-            }
-        }
-
-        /* Mobile responsiveness */
-        @media (max-width: 768px) {
-            .container {
-                width: 95%;
-            }
+        a {
+            color: black;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>{{ name }}</h1>
-            <p>{{ email }} | {{ phone }} | {{ address }}</p>
-            <p><a href="{{ website_link }}" target="_blank">{{ website }}</a></p>
-        </header>
+        <h1>{{ name }}</h1>
+        
+        <div class="contact-info">
+            {{ email }} | {{ phone }} | {{ address }}
+            <br />
+            <a href="{{ website_link }}">{{ website }}</a>
+        </div>
 
-        <section class="summary">
+        <div class="section summary">
             <h2>Summary</h2>
             <p>{{ summary }}</p>
-        </section>
+        </div>
 
-        <section class="education">
+        <div class="section education">
             <h2>Education</h2>
             {% for edu in education %}
             <div class="education-item">
@@ -186,9 +81,9 @@
                 <p>Graduated: {{ edu.graduationDate }}</p>
             </div>
             {% endfor %}
-        </section>
+        </div>
 
-        <section class="experience">
+        <div class="section experience">
             <h2>Work Experience</h2>
             {% for job in work_experience %}
             <div class="job">
@@ -203,18 +98,16 @@
                 </ul>
             </div>
             {% endfor %}
-        </section>
+        </div>
 
-        <section class="skills">
+        <div class="section skills">
             <h2>Skills</h2>
             <p>
-                {% for skill in skills %}
-                    {{ skill }}{% if not loop.last %} - {% endif %}
-                {% endfor %}
+                {% for skill in skills %}{{ skill }}{% if not loop.last %} - {% endif %}{% endfor %}
             </p>
-        </section>
+        </div>
 
-        <section class="certifications">
+        <div class="section certifications">
             <h2>Certifications</h2>
             {% for cert in certifications %}
             <div class="certification">
@@ -223,12 +116,12 @@
                 <p>Date: {{ cert.dateObtained }}</p>
             </div>
             {% endfor %}
-        </section>
+        </div>
 
-        <section class="References">
+        <div class="section references">
             <h2>References</h2>
             <p>Available upon request</p>
-        </section>
+        </div>
     </div>
 </body>
 </html>

@@ -32,7 +32,7 @@ def register():
                 error = f"user {username} is already registered"
 
         flash(error)
-        return render_template('auth/login.html')
+        return redirect(url_for('auth.login'))
     return render_template('auth/register.html')
 
 @bp.route('/login', methods=('GET', 'POST'))
