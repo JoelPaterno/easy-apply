@@ -8,7 +8,7 @@ from easyapplyapp.models import User
 def app():
     app = create_app({
         'TESTING': True,
-        'DATABASE': 'sqlite:////Users/joelp/easy-apply/tests/database.db',
+        'DATABASE': "sqlite:///database.db",
     })
 
     #add test users to the db. 
