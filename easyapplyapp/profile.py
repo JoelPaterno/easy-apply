@@ -35,13 +35,13 @@ def clear_files():
         resumes = os.listdir(resumes_path)
         for resume in resumes:
             resume_path = os.path.join(resumes_path, resume)
-            if os.path.isfile(resume_path):
+            if os.path.isfile(resume_path) and resume != 'donotdelete.txt':
                 os.remove(resume_path)
 
         coverletters = os.listdir(cover_letters_path)
         for coverletter in coverletters:
             coverletter_path = os.path.join(cover_letters_path, coverletter)
-            if os.path.isfile(coverletter_path):
+            if os.path.isfile(coverletter_path) and coverletter != 'donotdelete.txt':
                 os.remove(coverletter_path)
     except Exception as e:
         print(e)
@@ -589,9 +589,9 @@ def resume_dl(id):
     output_text = application.resume_file_path
     filename = f"{application.company} {application.role}" + " Resume"
     cwd = os.getcwd()
-    wkhtmltopdf_path = '/usr/bin/wkhtmltopdf'
+    #wkhtmltopdf_path = '/usr/bin/wkhtmltopdf'
     #uncomment for local
-    #wkhtmltopdf_path = "C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe"
+    wkhtmltopdf_path = "C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe"
     config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
     output_path = os.path.join(cwd, 'easyapplyapp', 'files', 'resumes')
     try:
@@ -612,9 +612,9 @@ def coverletter_dl(id):
     output_text = application.cover_letter_file_path
     cwd = os.getcwd()
     #below id for docker image
-    wkhtmltopdf_path = '/usr/bin/wkhtmltopdf'
+    #wkhtmltopdf_path = '/usr/bin/wkhtmltopdf'
     #uncomment for local
-    #wkhtmltopdf_path = "C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe"
+    wkhtmltopdf_path = "C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe"
     config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
     filename = f"{application.company} {application.role}" + " Cover Letter"
     output_path = os.path.join(cwd, 'easyapplyapp', 'files', 'coverletters')
