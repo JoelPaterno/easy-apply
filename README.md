@@ -10,15 +10,6 @@ EasyApply is an open-source web application that streamlines the job application
 - **PDF Generation**: Export your resumes and cover letters as professional PDFs
 - **User Authentication**: Secure user accounts and data protection
 
-## Tech Stack
-
-- **Backend**: Python Flask, SQLAlchemy ORM
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Database**: MySQL
-- **AI Services**: LangChain, OpenAI API
-- **Deployment**: Docker, Nginx, Gunicorn
-- **Cloud Infrastructure**: AWS (EC2, RDS, Certificate Manager, ALB)
-
 ## Getting Started
 
 ### Prerequisites
@@ -55,12 +46,12 @@ cp .env.example .env
 
 5. Initialize the database
 ```bash
-flask db upgrade
+flask init-db
 ```
 
 6. Run the development server
 ```bash
-flask run
+flask --app easyapplyapp --debug
 ```
 
 ### Docker Deployment
