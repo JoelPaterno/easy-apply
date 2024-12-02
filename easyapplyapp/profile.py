@@ -10,7 +10,7 @@ import os
 from timeit import default_timer as timer
 import time
 from .services.pdf_generator import generate_filename
-from xhtml2pdf import pisa
+import pdfkit
 
 bp = Blueprint('profile', __name__)
 
@@ -589,12 +589,15 @@ def resume_dl(id):
     output_text = application.resume_file_path
     filename = f"{application.company} {application.role}" + " Resume"
     cwd = os.getcwd()
+    wkhtmltopdf_path = '/usr/bin/wkhtmltopdf'
+    #uncomment for local
+    #wkhtmltopdf_path = "C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe"
+    config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
     output_path = os.path.join(cwd, 'easyapplyapp', 'files', 'resumes')
     try:
         os.chdir(cwd)
         os.chdir(output_path)
-        with open(f'{filename}.pdf', 'wb') as f:
-            pisa.CreatePDF(output_text, dest=f)
+        pdfkit.from_string(output_text, f"{filename}.pdf", configuration=config)
         os.chdir(cwd)
     except Exception as e:
          print(e)
@@ -605,16 +608,20 @@ def resume_dl(id):
 @login_required
 def coverletter_dl(id):
     application = Application.query.filter(Application.id == id).first()
+    
     output_text = application.cover_letter_file_path
     cwd = os.getcwd()
+    #below id for docker image
+    wkhtmltopdf_path = '/usr/bin/wkhtmltopdf'
+    #uncomment for local
+    #wkhtmltopdf_path = "C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe"
+    config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
     filename = f"{application.company} {application.role}" + " Cover Letter"
-    cwd = os.getcwd()
     output_path = os.path.join(cwd, 'easyapplyapp', 'files', 'coverletters')
     try:
         os.chdir(cwd)
         os.chdir(output_path)
-        with open(f'{filename}.pdf', 'wb') as f:
-            pisa.CreatePDF(output_text, dest=f)
+        pdfkit.from_string(output_text, f"{filename}.pdf", configuration=config)
         os.chdir(cwd)
     except Exception as e:
          print(e)
