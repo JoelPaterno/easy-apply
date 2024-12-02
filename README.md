@@ -1,22 +1,89 @@
-# easy-apply
-Flask App for Easy Apply Web App
-deploying to ec2 and containerising
-https://www.youtube.com/watch?v=KWIIPKbdxD0
-https://www.youtube.com/watch?v=z5XiVh6v4uI
-https://www.youtube.com/watch?v=dVEjSmKFUVI
-css page breaks
-https://davidwalsh.name/css-page-breaks
-https://stackoverflow.com/questions/2332100/how-to-add-page-break-dyanamically-to-print-page
-aws s3 files in flask
-https://www.youtube.com/watch?v=tSfdQJvTKmk
-https://www.youtube.com/watch?v=I_fTQTsz2nQ
-Testing with sqlalchemy db
-https://stackoverflow.com/questions/17791571/how-can-i-test-a-flask-application-which-uses-sqlalchemy 
-https://pythonhosted.org/Flask-Testing/
-Async
-https://www.youtube.com/watch?v=0z74b3c63GA
-SSL Certs
-https://www.youtube.com/watch?v=J9jKKeV1XVE 
-Print HTML to PDF 
-https://apitemplate.io/blog/how-to-convert-html-to-pdf-using-python/
-https://xhtml2pdf.readthedocs.io/en/latest/format_html.html for page templates xhtml2pdf library.
+# EasyApply - AI-Powered Job Application Assistant
+
+EasyApply is an open-source web application that streamlines the job application process by helping users manage their job applications, customize resumes, and generate cover letters using AI assistance.
+
+## Features
+
+- **Application Tracking**: Keep track of all your job applications in one place
+- **AI-Powered Cover Letters**: Generate customized cover letters using LangChain and OpenAI
+- **Resume Management**: Create and maintain multiple versions of your resume
+- **PDF Generation**: Export your resumes and cover letters as professional PDFs
+- **User Authentication**: Secure user accounts and data protection
+
+## Tech Stack
+
+- **Backend**: Python Flask, SQLAlchemy ORM
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Database**: MySQL
+- **AI Services**: LangChain, OpenAI API
+- **Deployment**: Docker, Nginx, Gunicorn
+- **Cloud Infrastructure**: AWS (EC2, RDS, Certificate Manager, ALB)
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.8+
+- Docker and Docker Compose
+- MySQL
+- OpenAI API key
+
+### Local Development Setup
+
+1. Clone the repository
+```bash
+git clone https://github.com/YourUsername/easy-apply.git
+cd easy-apply
+```
+
+2. Create and activate a virtual environment
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+4. Set up environment variables
+```bash
+cp .env.example .env
+# Edit .env with your configuration
+```
+
+5. Initialize the database
+```bash
+flask db upgrade
+```
+
+6. Run the development server
+```bash
+flask run
+```
+
+### Docker Deployment
+
+1. Build and run with Docker Compose
+```bash
+docker-compose up --build
+```
+
+## Configuration
+
+The application requires the following environment variables:
+
+- `OPENAI_API_KEY`: Your OpenAI API key
+- `DATABASE_URL`: MySQL database connection string
+- `SECRET_KEY`: Flask secret key
+- `Other environment variables`: Check .env.example for all required variables
+
+## Contributing
+
+We welcome contributions! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/A
