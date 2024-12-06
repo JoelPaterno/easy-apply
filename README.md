@@ -51,7 +51,7 @@ flask init-db
 
 6. Run the development server
 ```bash
-flask --app easyapplyapp --debug
+flask --app easyapplyapp run --debug
 ```
 
 ### Docker Deployment
