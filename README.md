@@ -61,6 +61,8 @@ flask --app easyapplyapp run --debug
 docker-compose up --build
 ```
 
+2. In your browser go to localhost to access the web app.
+
 ## Configuration
 
 The application requires the following environment variables:
@@ -68,8 +70,7 @@ The application requires the following environment variables:
 - `OPENAI_API_KEY`: Your OpenAI API key
 - `DATABASE_URL`: MySQL database connection string
 - `SECRET_KEY`: Flask secret key
-- `Other environment variables`: Check .env.example for all required variables
-
+- 
 ## Contributing
 
 We welcome contributions! Please feel free to submit a Pull Request.
